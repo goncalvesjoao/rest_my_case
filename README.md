@@ -1,2 +1,2 @@
-# rest_my_case
-Quick and light "The Clean Architecture" use case implementation
+# RestMyCase
+Very light Ruby gem with everything you need in a "The Clean Architecture" use case scenario. Strongly inspired on the tdantas/usecasing gem.
