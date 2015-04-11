@@ -2,7 +2,9 @@ module RestMyCase
 
   module Helpers
 
-    def self.stringify_keys(attributes)
+    extend self
+
+    def stringify_keys(attributes)
       attributes.to_hash
     end
 

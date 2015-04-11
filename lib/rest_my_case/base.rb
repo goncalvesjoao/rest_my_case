@@ -6,13 +6,13 @@ module RestMyCase
       local_dependencies.push *use_cases
     end
 
-    # List of use case classes that the current class depends on
+    # List of use case classes that the current class depends on.
     def self.local_dependencies
       @local_dependencies ||= []
     end
 
     # List of use cases that the current class depends on, plus its parent class
-    # This list will be used during .perform
+    # This list will be later used by the .perform method.
     def self.dependencies
       local_dependencies.concat superclass.dependencies
     end
@@ -20,6 +20,8 @@ module RestMyCase
     def self.perform(attributes = {})
       Judge.execute_the_sentence self, Context.new(attributes)
     end
+
+    ##################### INSTANCE METHODS BELLOW ###################
 
     attr_reader :context, :should_abort, :should_skip
 
@@ -37,7 +39,7 @@ module RestMyCase
 
     def final; end
 
-    # Calls #abort and populates the context's errors
+    # Calls #abort and populates the context's errors.
     def fail(message = '')
       abort
 
@@ -63,9 +65,9 @@ module RestMyCase
       raise Errors::Abort
     end
 
-    # To be used during the #before method:
-    #   Prevents the current use case to be
-    #   ran (during perform), but not the next ones
+    # To be used during the #before method.
+    # Prevents the current use case to be ran (during perform),
+    # but doesn't terminate the .perform process like the #stop method.
     def skip
       @should_skip = true
     end
