@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module RestMyCase
 
   class Context < OpenStruct
@@ -17,6 +19,8 @@ module RestMyCase
     def valid?
       @errors.empty?
     end
+
+    alias :ok? :valid?
 
     def serializable_hash(options = nil)
       marshal_dump

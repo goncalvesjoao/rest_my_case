@@ -14,6 +14,8 @@ module RestMyCase
     # List of use cases that the current class depends on, plus its parent class
     # This list will be later used by the .perform method.
     def self.dependencies
+      return [] unless superclass.respond_to?(:dependencies)
+
       local_dependencies.concat superclass.dependencies
     end
 
