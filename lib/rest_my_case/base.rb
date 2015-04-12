@@ -23,6 +23,21 @@ module RestMyCase
       Judge.execute_the_sentence self, Context.new(attributes)
     end
 
+    def self.context_accessor(*methods)
+      context_writer(*methods)
+      context_reader(*methods)
+    end
+
+    def self.context_writer(*methods)
+      methods.each do |method|
+        define_method("#{method}=") { |value| context.send "#{method}=", value }
+      end
+    end
+
+    def self.context_reader(*methods)
+      methods.each { |method| define_method(method) { context.send(method) } }
+    end
+
     ##################### INSTANCE METHODS BELLOW ###################
 
     attr_reader :context, :should_abort, :should_skip
@@ -50,9 +65,7 @@ module RestMyCase
 
     # Calls #fail and also prevents the next line of code to be ran
     def fail!(message = '')
-      fail message
-
-      raise Errors::Abort
+      fail(message) && raise Errors::Abort
     end
 
     # Prevents the next use case to be ran and will trigger the rollback process
@@ -62,9 +75,7 @@ module RestMyCase
 
     # Calls #abort and prevents the next line of code to be ran
     def abort!
-      abort
-
-      raise Errors::Abort
+      abort && raise Errors::Abort
     end
 
     # To be used during the #before method.
@@ -76,9 +87,7 @@ module RestMyCase
 
     # Calls #skip and prevents the next line of code to be ran
     def skip!
-      skip
-
-      raise Errors::Skip
+      skip && raise Errors::Skip
     end
 
   end
