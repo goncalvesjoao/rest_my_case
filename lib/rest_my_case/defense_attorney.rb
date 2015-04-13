@@ -12,6 +12,8 @@ module RestMyCase
       end
     end
 
+    protected ###################### PROTECTED #########################
+
     def self.dependencies(use_case)
       return [] unless use_case.respond_to?(:dependencies)
 
@@ -21,8 +23,6 @@ module RestMyCase
         use_case.dependencies | dependencies(use_case.superclass)
       end
     end
-
-    protected ###################### PROTECTED #########################
 
     def self.parent_dependencies_first?(use_case)
       # use_case.parent_dependencies_first ||
