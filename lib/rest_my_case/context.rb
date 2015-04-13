@@ -4,20 +4,12 @@ module RestMyCase
 
   class Context < OpenStruct
 
-    attr_reader :errors
-
-    def initialize(attributes)
-      if !attributes.is_a?(::Hash) && !attributes.is_a?(Context)
-        raise ArgumentError.new('Must be a Hash or Context')
-      end
-
-      super Helpers.stringify_keys(attributes)
-
-      @errors = Hash.new { |hash, key| hash[key] = [] }
+    def errors
+      @errors ||= Hash.new { |hash, key| hash[key] = [] }
     end
 
     def valid?
-      @errors.empty?
+      errors.empty?
     end
 
     alias :ok? :valid?

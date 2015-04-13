@@ -4,52 +4,74 @@ describe RestMyCase::Base do
 
   context "When a use case depends on other use cases" do
 
-    module Posts
-      module Create
-        class AssignAttributes < RestMyCase::Base; end
-        class SavePost < RestMyCase::Base; end
-
-        class Base < RestMyCase::Base
-          depends AssignAttributes, SavePost
-        end
-      end
-    end
-
-    it ".dependencies and .local_dependencies should list those use cases" do
-      dependencies = [Posts::Create::AssignAttributes, Posts::Create::SavePost]
-
-      expect(Posts::Create::Base.dependencies).to eq dependencies
-      expect(Posts::Create::Base.local_dependencies).to eq dependencies
+    it ".dependencies should list the class's dependencies" do
+      expect(Posts::Create::Base.dependencies).to \
+        eq [Posts::Create::BuildPost, Posts::SavePost]
     end
 
   end
 
   context "When a use case inherits from another that also has its own dependencies" do
 
-    module SendEmail
-      class ToAdmins < RestMyCase::Base; end
-      class ToUser < RestMyCase::Base; end
-
-      class Base < RestMyCase::Base
-        depends ToAdmins, ToUser
-      end
+    it ".dependencies should only list the class's dependencies" do
+      expect(Comments::Create::SendEmail.dependencies).to eq [Comments::FindOne]
     end
 
-    module Comments
-      class FindComment < RestMyCase::Base; end
+  end
 
-      class SendEmail < ::SendEmail::Base
-        depends FindComment
-      end
+  describe ".context_accessor" do
+
+    let(:context)   { RestMyCase::Context.new(id: 1, comment: 'my comment', session: -1) }
+    let(:use_case)  { Comments::FindOne.new(context) }
+
+    it "Should create getters targeting to context" do
+      expect(use_case.respond_to?(:comment)).to be true
     end
 
-    it ".local_dependencies should list only one use cases" do
-      expect(Comments::SendEmail.local_dependencies).to eq [Comments::FindComment]
+    it "Should create setters targeting to context" do
+      expect(use_case.respond_to?(:comment=)).to be true
     end
 
-    it ".dependencies should list 3 use cases" do
-      expect(Comments::SendEmail.dependencies).to \
-        eq [Comments::FindComment, SendEmail::ToAdmins, SendEmail::ToUser]
+    it "Getter should delegate to context" do
+      expect(use_case.comment).to eq context.comment
+    end
+
+    it "Setter should delegate to context" do
+      use_case.comment = 'your comment'
+      expect(use_case.context.comment).to eq 'your comment'
+    end
+
+  end
+
+  describe ".context_writer" do
+
+    let(:use_case) { Comments::FindOne.new(RestMyCase::Context.new) }
+
+    it "Should create setters targeting to context" do
+      expect(use_case.respond_to?(:id)).to be false
+      expect(use_case.respond_to?(:id=)).to be true
+    end
+
+    it "Setter should delegate to context" do
+      use_case.id = 2
+
+      expect(use_case.context.id).to eq 2
+    end
+
+  end
+
+  describe ".context_reader" do
+
+    let(:context)   { RestMyCase::Context.new(id: 1, comment: 'my comment', session: -1) }
+    let(:use_case)  { Comments::FindOne.new(context) }
+
+    it "Should create getters targeting to context" do
+      expect(use_case.respond_to?(:session)).to be true
+      expect(use_case.respond_to?(:session=)).to be false
+    end
+
+    it "Getter should delegate to context" do
+      expect(use_case.session).to eq context.session
     end
 
   end

@@ -1,26 +1,23 @@
+require "rest_my_case/judges/base"
+
 module RestMyCase
 
   class Base
 
     def self.depends(*use_cases)
-      local_dependencies.push *use_cases
+      dependencies.push *use_cases
     end
 
-    # List of use case classes that the current class depends on.
-    def self.local_dependencies
-      @local_dependencies ||= []
-    end
-
-    # List of use cases that the current class depends on, plus its parent class
-    # This list will be later used by the .perform method.
     def self.dependencies
-      return [] unless superclass.respond_to?(:dependencies)
-
-      local_dependencies.concat superclass.dependencies
+      @dependencies ||= []
     end
 
     def self.perform(attributes = {})
-      Judge.execute_the_sentence self, Context.new(attributes)
+      unless attributes.respond_to?(:to_hash)
+        raise ArgumentError.new('Must respond_to method #to_hash')
+      end
+
+      Judges::Base.execute_the_sentence(self, attributes.to_hash)
     end
 
     def self.context_accessor(*methods)
@@ -43,12 +40,12 @@ module RestMyCase
     attr_reader :context, :should_abort, :should_skip
 
     def initialize(context)
-      @context = context
-
-      @should_abort = @should_skip = false
+      @context      = context
+      @should_skip  = false
+      @should_abort = false
     end
 
-    def before;  end
+    def setup;  end
 
     def perform;  end
 
@@ -56,38 +53,28 @@ module RestMyCase
 
     def final; end
 
-    # Calls #abort and populates the context's errors.
     def fail(message = '')
-      abort
-
-      @context.errors[self.class.name].push message
+      abort && @context.errors[self.class.name].push(message)
     end
 
-    # Calls #fail and also prevents the next line of code to be ran
     def fail!(message = '')
-      fail(message) && raise Errors::Abort
+      fail(message) && raise(Errors::Abort)
     end
 
-    # Prevents the next use case to be ran and will trigger the rollback process
     def abort
       @should_abort = true
     end
 
-    # Calls #abort and prevents the next line of code to be ran
     def abort!
-      abort && raise Errors::Abort
+      abort && raise(Errors::Abort)
     end
 
-    # To be used during the #before method.
-    # Prevents the current use case to be ran (during perform),
-    # but doesn't terminate the .perform process like the #stop method.
     def skip
       @should_skip = true
     end
 
-    # Calls #skip and prevents the next line of code to be ran
     def skip!
-      skip && raise Errors::Skip
+      skip && raise(Errors::Skip)
     end
 
   end

@@ -1,7 +1,24 @@
+require "rest_my_case/configuration"
 require "rest_my_case/version"
-require "rest_my_case/context"
 require "rest_my_case/errors"
-require "rest_my_case/judge"
 require "rest_my_case/base"
 
-module RestMyCase; end
+module RestMyCase
+
+  def self.configure(&block)
+    yield(Config)
+  end
+
+  def self.configure
+    yield configuration
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.reset_configuration
+    @configuration = Configuration.new
+  end
+
+end
