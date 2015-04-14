@@ -3,17 +3,19 @@ module RestMyCase
 
     class Base
 
+      def self.execute_the_sentence(trial_cases)
+        new_trial = self.new(trial_cases)
+
+        new_trial.run_setup_methods
+        new_trial.run_perform_methods
+        new_trial.run_rollback_methods
+        new_trial.run_final_methods
+      end
+
       def initialize(use_cases)
         @use_cases             = use_cases
         @performed_use_cases   = []
         @use_case_that_aborted = false
-      end
-
-      def execute_the_sentence
-        run_setup_methods
-        run_perform_methods
-        run_rollback_methods
-        run_final_methods
       end
 
       protected #################### PROTECTED ####################
@@ -51,7 +53,7 @@ module RestMyCase
       end
 
       def method_perform_has_aborted(use_case)
-        return false if use_case.should_skip
+        return false if use_case.options[:should_skip]
 
         @performed_use_cases.push use_case
 
@@ -62,7 +64,7 @@ module RestMyCase
         begin
           run_method(method_name, use_case)
 
-          use_case.should_abort
+          use_case.options[:should_abort]
         rescue Errors::Skip => exception
           false
         rescue Errors::Abort => exception

@@ -4,53 +4,60 @@ module RestMyCase
 
   class DefenseAttorney
 
-    def initialize(starting_point_use_case, attributes)
+    def self.build_trial_cases(defendant, attributes)
+      self.new(attributes).all_dependencies(defendant)
+    end
+
+    def initialize(attributes)
       unless attributes.respond_to?(:to_hash)
         raise ArgumentError.new('Must respond_to method #to_hash')
       end
 
-      @shared_context          = Context.new attributes.to_hash
-      @starting_point_use_case = starting_point_use_case
+      @shared_context = Context.new attributes.to_hash
     end
 
-    def build_trial_case
-      all_dependencies(@starting_point_use_case).map do |use_case|
-        use_case.new(@shared_context)
+    def all_dependencies(use_case, options = {})
+      return [] unless use_case.respond_to?(:dependencies)
+
+      parent_dependencies = all_dependencies(use_case.superclass, options)
+
+      if RestMyCase.get_config(:parent_dependencies_first, use_case)
+        parent_dependencies | deep_dependencies(use_case, options)
+      else
+        deep_dependencies(use_case, options) | parent_dependencies
       end
     end
 
     protected ###################### PROTECTED #########################
 
-    def all_dependencies(use_case)
-      return [] unless use_case.respond_to?(:dependencies)
-
-      if RestMyCase.get_config(:parent_dependencies_first, use_case)
-        all_dependencies(use_case.superclass) | deep_dependencies(use_case)
-      else
-        deep_dependencies(use_case) | all_dependencies(use_case.superclass)
-      end
-    end
-
-    def deep_dependencies(use_case)
+    def deep_dependencies(use_case, options)
+      options           = build_options(use_case, options)
       deep_dependencies = []
 
-      use_case.dependencies.each do |use_case|
-        deep_dependencies.push *all_dependencies(use_case)
+      use_case.dependencies.each do |dependency|
+        deep_dependencies.push *all_dependencies(dependency, options)
       end
 
-      include_current_use_case(deep_dependencies, use_case)
+      include_current_use_case(deep_dependencies, use_case, options)
     end
 
     private ####################### PRIVATE ###########################
 
-    def include_current_use_case(dependencies, use_case)
+    def build_options(use_case, options)
+      unless use_case.silence_dependencies_abort.nil?
+        options[:silent_abort] = use_case.silence_dependencies_abort
+      end
+
+      options
+    end
+
+    def include_current_use_case(dependencies, use_case, options)
       return dependencies unless use_case.superclass.respond_to?(:dependencies)
 
-      if RestMyCase.get_config(:dependencies_first, use_case)
-        dependencies.push(use_case)
-      else
-        dependencies.unshift(use_case)
-      end
+      append_method =
+        RestMyCase.get_config(:dependencies_first, use_case) ? :push : :unshift
+
+      dependencies.send(append_method, use_case.new(@shared_context, options))
     end
 
   end

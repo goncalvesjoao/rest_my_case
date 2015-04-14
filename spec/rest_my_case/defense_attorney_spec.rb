@@ -49,7 +49,7 @@ describe RestMyCase::DefenseAttorney do
 
   context "When a use case depends on other use cases" do
     let(:use_cases) do
-      described_class.new(DefenseAttorney::UseCaseWrapper, id: 1).build_trial_case
+      described_class.build_trial_cases(DefenseAttorney::UseCaseWrapper, id: 1)
     end
 
     it_behaves_like "a porper shepherd", [
@@ -64,7 +64,7 @@ describe RestMyCase::DefenseAttorney do
 
   context "When a use case inherits from another that also has its own dependencies" do
     let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case
+      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
     end
 
     it_behaves_like "a porper shepherd", [
@@ -94,7 +94,7 @@ describe RestMyCase::DefenseAttorney do
     after { RestMyCase.reset_config }
 
     let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case
+      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
     end
 
     it_behaves_like "a porper shepherd", [
@@ -126,7 +126,7 @@ describe RestMyCase::DefenseAttorney do
     after { RestMyCase.reset_config }
 
     let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case
+      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
     end
 
     it_behaves_like "a porper shepherd", [
@@ -154,7 +154,7 @@ describe RestMyCase::DefenseAttorney do
     after { DefenseAttorney::UseCaseWrapper.dependencies_first = nil }
 
     let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case
+      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
     end
 
     it_behaves_like "a porper shepherd", [

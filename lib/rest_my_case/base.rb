@@ -1,3 +1,4 @@
+require "rest_my_case/configuration/use_case"
 require "rest_my_case/defense_attorney"
 require "rest_my_case/judges/base"
 
@@ -5,7 +6,7 @@ module RestMyCase
 
   class Base
 
-    extend Configuration::Shared
+    extend Configuration::UseCase
 
     def self.depends(*use_cases)
       dependencies.push *use_cases
@@ -16,9 +17,9 @@ module RestMyCase
     end
 
     def self.perform(attributes = {})
-      new_trial_case = DefenseAttorney.new(self, attributes).build_trial_case
+      new_trial_cases = DefenseAttorney.build_trial_cases(self, attributes)
 
-      Judges::Base.new(trial_case).execute_the_sentence
+      Judges::Base.execute_the_sentence(new_trial_cases)
     end
 
     def self.context_accessor(*methods)
@@ -38,12 +39,11 @@ module RestMyCase
 
     ##################### INSTANCE METHODS BELLOW ###################
 
-    attr_reader :context, :should_abort, :should_skip
+    attr_reader :context, :options
 
-    def initialize(context)
-      @context      = context
-      @should_skip  = false
-      @should_abort = false
+    def initialize(context, options = {})
+      @context = context
+      @options = options
     end
 
     def setup;  end
@@ -63,7 +63,7 @@ module RestMyCase
     end
 
     def abort
-      @should_abort = true
+      options[:should_abort] = true
     end
 
     def abort!
@@ -71,7 +71,7 @@ module RestMyCase
     end
 
     def skip
-      @should_skip = true
+      options[:should_skip] = true
     end
 
     def skip!
