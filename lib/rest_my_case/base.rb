@@ -1,8 +1,11 @@
+require "rest_my_case/defense_attorney"
 require "rest_my_case/judges/base"
 
 module RestMyCase
 
   class Base
+
+    extend Configuration::Shared
 
     def self.depends(*use_cases)
       dependencies.push *use_cases
@@ -13,11 +16,9 @@ module RestMyCase
     end
 
     def self.perform(attributes = {})
-      unless attributes.respond_to?(:to_hash)
-        raise ArgumentError.new('Must respond_to method #to_hash')
-      end
+      new_trial_case = DefenseAttorney.new(self, attributes).build_trial_case
 
-      Judges::Base.execute_the_sentence(self, attributes.to_hash)
+      Judges::Base.new(trial_case).execute_the_sentence
     end
 
     def self.context_accessor(*methods)

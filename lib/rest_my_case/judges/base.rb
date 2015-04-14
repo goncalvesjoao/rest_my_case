@@ -1,25 +1,19 @@
-require "rest_my_case/defense_attorney"
-
 module RestMyCase
   module Judges
 
     class Base
 
-      def self.execute_the_sentence(defendant, attributes)
-        new_trial = self.new(defendant, attributes)
-
-        new_trial.run_setup_methods
-        new_trial.run_perform_methods
-        new_trial.run_rollback_methods
-        new_trial.run_final_methods
-      end
-
-      def initialize(defendant, attributes)
-        @use_cases =
-          DefenseAttorney.build_use_cases_for_the(defendant, attributes)
-
+      def initialize(use_cases)
+        @use_cases             = use_cases
         @performed_use_cases   = []
         @use_case_that_aborted = false
+      end
+
+      def execute_the_sentence
+        run_setup_methods
+        run_perform_methods
+        run_rollback_methods
+        run_final_methods
       end
 
       protected #################### PROTECTED ####################
