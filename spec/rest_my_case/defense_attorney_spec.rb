@@ -2,35 +2,6 @@ require 'spec_helper'
 
 describe RestMyCase::DefenseAttorney do
 
-  module DefenseAttorney
-    class BuilEvent < RestMyCase::Base; end
-    class SaveEvent < RestMyCase::Base; end
-    class CreateEvent < RestMyCase::Base
-      depends SaveEvent
-    end
-    class LogEvents < RestMyCase::Base
-      depends BuilEvent, CreateEvent
-    end
-    class AnalyseEvents < RestMyCase::Base; end
-    class BuildPost < RestMyCase::Base; end
-    class SavePost < RestMyCase::Base; end
-    class BuildComments < RestMyCase::Base; end
-    class SaveComments < RestMyCase::Base; end
-    class CreateComments < RestMyCase::Base
-      depends SaveComments
-    end
-
-    class UseCaseWrapper < RestMyCase::Base
-      depends LogEvents, AnalyseEvents
-    end
-    class CreatePost < UseCaseWrapper
-      depends BuildPost, SavePost
-    end
-    class CreatePostWithComments < CreatePost
-      depends BuildComments, CreateComments
-    end
-  end
-
   shared_examples "a porper shepherd" do |dependencies|
     it "use_cases should be in the proper order" do
       dependencies.each_with_index do |dependency, index|
@@ -49,7 +20,7 @@ describe RestMyCase::DefenseAttorney do
 
   context "When a use case depends on other use cases" do
     let(:use_cases) do
-      described_class.build_trial_cases(DefenseAttorney::UseCaseWrapper, id: 1)
+      described_class.new(DefenseAttorney::UseCaseWrapper, id: 1).build_trial_case_for_the_defendant.use_cases
     end
 
     it_behaves_like "a porper shepherd", [
@@ -64,7 +35,7 @@ describe RestMyCase::DefenseAttorney do
 
   context "When a use case inherits from another that also has its own dependencies" do
     let(:use_cases) do
-      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
+      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
     end
 
     it_behaves_like "a porper shepherd", [
@@ -94,7 +65,7 @@ describe RestMyCase::DefenseAttorney do
     after { RestMyCase.reset_config }
 
     let(:use_cases) do
-      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
+      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
     end
 
     it_behaves_like "a porper shepherd", [
@@ -126,7 +97,7 @@ describe RestMyCase::DefenseAttorney do
     after { RestMyCase.reset_config }
 
     let(:use_cases) do
-      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
+      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
     end
 
     it_behaves_like "a porper shepherd", [
@@ -154,7 +125,7 @@ describe RestMyCase::DefenseAttorney do
     after { DefenseAttorney::UseCaseWrapper.dependencies_first = nil }
 
     let(:use_cases) do
-      described_class.build_trial_cases(DefenseAttorney::CreatePostWithComments, id: 1)
+      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
     end
 
     it_behaves_like "a porper shepherd", [
@@ -172,6 +143,24 @@ describe RestMyCase::DefenseAttorney do
       DefenseAttorney::CreateComments,
       DefenseAttorney::CreatePostWithComments
     ]
+  end
+
+  context "When nil is used has attributes" do
+    let(:defendant) { DefenseAttorney::CreatePostWithComments }
+
+    it "should raise an exception" do
+      expect { described_class.new(defendant, nil) }.to \
+        raise_error(ArgumentError)
+    end
+  end
+
+  context "When something that doesn't responde to #to_hash is used" do
+    let(:defendant) { DefenseAttorney::CreatePostWithComments }
+
+    it "should raise an exception" do
+      expect { described_class.new(defendant, Object.new) }.to \
+        raise_error(ArgumentError)
+    end
   end
 
 end

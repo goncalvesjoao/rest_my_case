@@ -17,9 +17,10 @@ module RestMyCase
     end
 
     def self.perform(attributes = {})
-      new_trial_cases = DefenseAttorney.build_trial_cases(self, attributes)
+      attorney   = DefenseAttorney.new(self, attributes)
+      trial_case = attorney.build_trial_case_for_the_defendant
 
-      Judges::Base.execute_the_sentence(new_trial_cases)
+      Judges::Base.new(trial_case).execute_the_sentence
     end
 
     def self.context_accessor(*methods)

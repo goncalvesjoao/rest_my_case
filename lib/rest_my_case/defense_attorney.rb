@@ -4,17 +4,22 @@ module RestMyCase
 
   class DefenseAttorney
 
-    def self.build_trial_cases(defendant, attributes)
-      self.new(attributes).all_dependencies(defendant)
-    end
+    class TrialCase < Struct.new(:use_cases, :context); end
 
-    def initialize(attributes)
+    def initialize(defendant, attributes)
       unless attributes.respond_to?(:to_hash)
         raise ArgumentError.new('Must respond_to method #to_hash')
       end
 
-      @shared_context = Context.new attributes.to_hash
+      @context   = Context.new attributes.to_hash
+      @defendant = defendant
     end
+
+    def build_trial_case_for_the_defendant
+      TrialCase.new all_dependencies(@defendant), @context
+    end
+
+    protected ###################### PROTECTED #########################
 
     def all_dependencies(use_case, options = {})
       return [] unless use_case.respond_to?(:dependencies)
@@ -27,8 +32,6 @@ module RestMyCase
         deep_dependencies(use_case, options) | parent_dependencies
       end
     end
-
-    protected ###################### PROTECTED #########################
 
     def deep_dependencies(use_case, options)
       options           = build_options(use_case, options)
@@ -57,7 +60,7 @@ module RestMyCase
       append_method =
         RestMyCase.get_config(:dependencies_first, use_case) ? :push : :unshift
 
-      dependencies.send(append_method, use_case.new(@shared_context, options))
+      dependencies.send(append_method, use_case.new(@context, options))
     end
 
   end

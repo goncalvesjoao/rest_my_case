@@ -2,32 +2,10 @@ require 'spec_helper'
 
 describe RestMyCase::Base do
 
-  module RestMyCaseBase
-    class LogEvents < RestMyCase::Base; end
-    class AnalyseEvents < RestMyCase::Base; end
-    class BuildPost < RestMyCase::Base; end
-    class SavePost < RestMyCase::Base; end
-    class BuildComments < RestMyCase::Base; end
-    class SaveComments < RestMyCase::Base; end
-
-    class UseCaseWrapper < RestMyCase::Base
-      context_writer    :id
-      context_reader    :session
-      context_accessor  :comment
-      depends LogEvents, AnalyseEvents
-    end
-    class CreatePost < UseCaseWrapper
-      depends BuildPost, SavePost
-    end
-    class CreatePostWithComments < CreatePost
-      depends BuildComments, SaveComments
-    end
-  end
-
   describe ".dependencies" do
     it " should only list the class's dependencies" do
       expect(RestMyCaseBase::CreatePostWithComments.dependencies).to \
-        eq [RestMyCaseBase::BuildComments, RestMyCaseBase::SaveComments]
+        eq [RestMyCaseBase::BuildComments, RestMyCaseBase::CreateComments]
     end
   end
 
@@ -80,6 +58,35 @@ describe RestMyCase::Base do
     it "Getter should delegate to context" do
       expect(use_case.session).to eq context.session
     end
+  end
+
+  describe ".perform" do
+
+    context "When a use case aborts during the setup process" do
+      module SetupAbort
+        class ValidateName < RestMyCase::Base
+          def perform; fail('no name present!'); end
+        end
+        class ValidateBody < RestMyCase::Base
+          def perform; fail('no body present!'); end
+        end
+        class Validations < RestMyCase::Base
+          depends ValidateName, ValidateBody
+        end
+        class BuildPost < RestMyCase::Base; end
+        class SavePost < RestMyCase::Base; end
+        class CreatePost < RestMyCase::Base
+          depends BuildPost, Validations, SavePost
+        end
+      end
+
+      it "context should reflect an invalid state" do
+        context = SetupAbort::CreatePost.perform
+
+        expect(context.valid?).to be false
+      end
+    end
+
   end
 
 end

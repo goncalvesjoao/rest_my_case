@@ -3,25 +3,25 @@ module RestMyCase
 
     class Base
 
-      def self.execute_the_sentence(trial_cases)
-        new_trial = self.new(trial_cases)
-
-        new_trial.run_setup_methods
-        new_trial.run_perform_methods
-        new_trial.run_rollback_methods
-        new_trial.run_final_methods
-      end
-
-      def initialize(use_cases)
-        @use_cases             = use_cases
+      def initialize(trial_case)
+        @trial_case            = trial_case
         @performed_use_cases   = []
         @use_case_that_aborted = false
+      end
+
+      def execute_the_sentence
+        run_setup_methods
+        run_perform_methods
+        run_rollback_methods
+        run_final_methods
+
+        @trial_case.context
       end
 
       protected #################### PROTECTED ####################
 
       def run_setup_methods
-        @use_cases.each do |use_case|
+        @trial_case.use_cases.each do |use_case|
           break if method_setup_has_aborted use_case
         end
       end
@@ -29,7 +29,7 @@ module RestMyCase
       def run_perform_methods
         return nil if @use_case_that_aborted
 
-        @use_cases.each do |use_case|
+        @trial_case.use_cases.each do |use_case|
           break if method_perform_has_aborted use_case
         end
       end
@@ -43,7 +43,7 @@ module RestMyCase
       end
 
       def run_final_methods
-        @use_cases.each { |use_case| run_method(:final, use_case) }
+        @trial_case.use_cases.each { |use_case| run_method(:final, use_case) }
       end
 
       private #################### PRIVATE ######################
