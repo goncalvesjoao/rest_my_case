@@ -62,7 +62,7 @@ module RestMyCase
         begin
           run_method(method_name, use_case)
 
-          use_case.options[:should_abort]
+          use_case.options[:should_abort] && @use_case_that_aborted = use_case
         rescue Errors::Skip => exception
           false
         rescue Errors::Abort => exception
