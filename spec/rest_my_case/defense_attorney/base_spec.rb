@@ -1,6 +1,12 @@
 require 'spec_helper'
 
-describe RestMyCase::DefenseAttorney do
+describe RestMyCase::DefenseAttorney::Base do
+
+  let(:use_cases) do
+    described_class.new(trial_case).build_case_for_the_defendant
+
+    trial_case.use_cases
+  end
 
   shared_examples "a porper shepherd" do |dependencies|
     it "use_cases should be in the proper order" do
@@ -19,9 +25,7 @@ describe RestMyCase::DefenseAttorney do
   end
 
   context "When a use case depends on other use cases" do
-    let(:use_cases) do
-      described_class.new(DefenseAttorney::UseCaseWrapper, id: 1).build_trial_case_for_the_defendant.use_cases
-    end
+    let(:trial_case) { RestMyCase::TrialCase::Base.new(DefenseAttorney::UseCaseWrapper, id: 1) }
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::BuilEvent,
@@ -34,9 +38,7 @@ describe RestMyCase::DefenseAttorney do
   end
 
   context "When a use case inherits from another that also has its own dependencies" do
-    let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
-    end
+    let(:trial_case) { RestMyCase::TrialCase::Base.new DefenseAttorney::CreatePostWithComments, id: 1 }
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::BuilEvent,
@@ -56,6 +58,8 @@ describe RestMyCase::DefenseAttorney do
   end
 
   context "When general configuration has parent_dependencies_first = false" do
+    let(:trial_case) { RestMyCase::TrialCase::Base.new DefenseAttorney::CreatePostWithComments, id: 1 }
+
     before do
       RestMyCase.configure do |config|
         config.parent_dependencies_first = false
@@ -63,10 +67,6 @@ describe RestMyCase::DefenseAttorney do
     end
 
     after { RestMyCase.reset_config }
-
-    let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
-    end
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::BuildComments,
@@ -88,6 +88,8 @@ describe RestMyCase::DefenseAttorney do
   end
 
   context "When general configuration has dependencies_first = false" do
+    let(:trial_case) { RestMyCase::TrialCase::Base.new DefenseAttorney::CreatePostWithComments, id: 1 }
+
     before do
       RestMyCase.configure do |config|
         config.dependencies_first = false
@@ -95,10 +97,6 @@ describe RestMyCase::DefenseAttorney do
     end
 
     after { RestMyCase.reset_config }
-
-    let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
-    end
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::UseCaseWrapper,
@@ -118,15 +116,13 @@ describe RestMyCase::DefenseAttorney do
   end
 
   context "When an use case class configuration has dependencies_first = false" do
+    let(:trial_case) { RestMyCase::TrialCase::Base.new DefenseAttorney::CreatePostWithComments, id: 1 }
+
     before do
       DefenseAttorney::UseCaseWrapper.dependencies_first = false
     end
 
     after { DefenseAttorney::UseCaseWrapper.dependencies_first = nil }
-
-    let(:use_cases) do
-      described_class.new(DefenseAttorney::CreatePostWithComments, id: 1).build_trial_case_for_the_defendant.use_cases
-    end
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::UseCaseWrapper,
@@ -143,24 +139,6 @@ describe RestMyCase::DefenseAttorney do
       DefenseAttorney::CreateComments,
       DefenseAttorney::CreatePostWithComments
     ]
-  end
-
-  context "When nil is used has attributes" do
-    let(:defendant) { DefenseAttorney::CreatePostWithComments }
-
-    it "should raise an exception" do
-      expect { described_class.new(defendant, nil) }.to \
-        raise_error(ArgumentError)
-    end
-  end
-
-  context "When something that doesn't responde to #to_hash is used" do
-    let(:defendant) { DefenseAttorney::CreatePostWithComments }
-
-    it "should raise an exception" do
-      expect { described_class.new(defendant, Object.new) }.to \
-        raise_error(ArgumentError)
-    end
   end
 
 end

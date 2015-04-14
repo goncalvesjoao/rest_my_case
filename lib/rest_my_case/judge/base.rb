@@ -1,5 +1,5 @@
 module RestMyCase
-  module Judges
+  module Judge
 
     class Base
 
@@ -14,8 +14,6 @@ module RestMyCase
         run_perform_methods
         run_rollback_methods
         run_final_methods
-
-        @trial_case.context
       end
 
       protected #################### PROTECTED ####################

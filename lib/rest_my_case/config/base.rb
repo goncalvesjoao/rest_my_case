@@ -1,7 +1,7 @@
 module RestMyCase
-  module Configuration
+  module Config
 
-    module UseCase
+    module Base
 
       include Shared
 

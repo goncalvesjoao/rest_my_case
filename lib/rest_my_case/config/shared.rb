@@ -1,5 +1,5 @@
 module RestMyCase
-  module Configuration
+  module Config
 
     module Shared
 

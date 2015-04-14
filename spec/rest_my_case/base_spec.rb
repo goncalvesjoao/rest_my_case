@@ -10,7 +10,7 @@ describe RestMyCase::Base do
   end
 
   describe ".context_accessor" do
-    let(:context)   { RestMyCase::Context.new(id: 1, comment: 'my comment', session: -1) }
+    let(:context)   { RestMyCase::TrialCase::Context.new(id: 1, comment: 'my comment', session: -1) }
     let(:use_case)  { RestMyCaseBase::CreatePostWithComments.new(context) }
 
     it "Should create getters targeting to context" do
@@ -32,7 +32,7 @@ describe RestMyCase::Base do
   end
 
   describe ".context_writer" do
-    let(:use_case) { RestMyCaseBase::CreatePostWithComments.new(RestMyCase::Context.new) }
+    let(:use_case) { RestMyCaseBase::CreatePostWithComments.new(RestMyCase::TrialCase::Context.new) }
 
     it "Should create setters targeting to context" do
       expect(use_case.respond_to?(:id)).to be false
@@ -47,7 +47,7 @@ describe RestMyCase::Base do
   end
 
   describe ".context_reader" do
-    let(:context)   { RestMyCase::Context.new(id: 1, comment: 'my comment', session: -1) }
+    let(:context)   { RestMyCase::TrialCase::Context.new(id: 1, comment: 'my comment', session: -1) }
     let(:use_case)  { RestMyCaseBase::CreatePostWithComments.new(context) }
 
     it "Should create getters targeting to context" do
@@ -62,28 +62,30 @@ describe RestMyCase::Base do
 
   describe ".perform" do
 
-    context "When a use case aborts during the setup process" do
-      module SetupAbort
-        class ValidateName < RestMyCase::Base
-          def perform; fail('no name present!'); end
-        end
-        class ValidateBody < RestMyCase::Base
-          def perform; fail('no body present!'); end
-        end
-        class Validations < RestMyCase::Base
-          depends ValidateName, ValidateBody
-        end
-        class BuildPost < RestMyCase::Base; end
-        class SavePost < RestMyCase::Base; end
-        class CreatePost < RestMyCase::Base
-          depends BuildPost, Validations, SavePost
-        end
+    context "When something that doesn't responde to #to_hash is used" do
+      it "should raise an exception" do
+        expect { RestMyCaseBase::CreatePost.perform(Object.new) }.to \
+          raise_error(ArgumentError)
       end
+    end
+
+    context "When a use case #abort during the setup process" do
+      before { @context = Perform::CreatePost.perform }
 
       it "context should reflect an invalid state" do
-        context = SetupAbort::CreatePost.perform
+        expect(@context.valid?).to be false
+      end
 
-        expect(context.valid?).to be false
+      it "context should contain only one error" do
+        expect(@context.errors.keys.length).to be 1
+      end
+
+      it "context must not be populated by the #perform methods" do
+        # binding.pry
+        expect(@context.setup.length).to be 2
+        expect(@context.perform.length).to be 0
+        expect(@context.rollback.length).to be 2
+        expect(@context.final.length).to be 6
       end
     end
 

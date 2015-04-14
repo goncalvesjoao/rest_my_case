@@ -1,12 +1,8 @@
-require "rest_my_case/configuration/use_case"
-require "rest_my_case/defense_attorney"
-require "rest_my_case/judges/base"
-
 module RestMyCase
 
   class Base
 
-    extend Configuration::UseCase
+    extend Config::Base
 
     def self.depends(*use_cases)
       dependencies.push *use_cases
@@ -17,10 +13,15 @@ module RestMyCase
     end
 
     def self.perform(attributes = {})
-      attorney   = DefenseAttorney.new(self, attributes)
-      trial_case = attorney.build_trial_case_for_the_defendant
+      trial_case = TrialCase::Base.new self, attributes
+      attorney   = DefenseAttorney::Base.new trial_case
+      judge      = Judge::Base.new trial_case
 
-      Judges::Base.new(trial_case).execute_the_sentence
+      attorney.build_case_for_the_defendant
+
+      judge.execute_the_sentence
+
+      trial_case.context
     end
 
     def self.context_accessor(*methods)

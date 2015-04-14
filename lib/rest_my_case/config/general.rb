@@ -1,9 +1,7 @@
-require "rest_my_case/configuration/shared"
-
 module RestMyCase
-  module Configuration
+  module Config
 
-    class Base
+    class General
 
       include Shared
 
