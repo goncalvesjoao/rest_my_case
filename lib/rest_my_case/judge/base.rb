@@ -35,7 +35,7 @@ module RestMyCase
       def run_rollback_methods
         return nil unless @use_case_that_aborted
 
-        @performed_use_cases.revert.each do |use_case|
+        @performed_use_cases.reverse.each do |use_case|
           run_method(:rollback, use_case)
         end
       end
