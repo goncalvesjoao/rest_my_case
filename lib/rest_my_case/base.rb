@@ -45,7 +45,7 @@ module RestMyCase
 
     def initialize(context, options = {})
       @context = context
-      @options = options
+      @options = options.dup
     end
 
     def setup;  end
@@ -56,20 +56,20 @@ module RestMyCase
 
     def final; end
 
-    def fail(message = '')
-      abort && @context.errors[self.class.name].push(message)
-    end
-
-    def fail!(message = '')
-      fail(message) && raise(Errors::Abort)
-    end
-
     def abort
       options[:should_abort] = true
     end
 
     def abort!
       abort && raise(Errors::Abort)
+    end
+
+    def fail(message = '')
+      abort && context.errors[self.class.name].push(message)
+    end
+
+    def fail!(message = '')
+      fail(message) && raise(Errors::Abort)
     end
 
     def skip

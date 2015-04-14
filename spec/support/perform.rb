@@ -1,11 +1,7 @@
 module Perform
 
   class ValidateName < RestMyCase::Base
-    context_reader :name
-
     def setup
-      fail('no name present!') if name.nil?
-
       context.setup << self.class.name
     end
 
@@ -23,11 +19,7 @@ module Perform
   end
 
   class ValidateBody < RestMyCase::Base
-    context_reader :body
-
     def setup
-      fail('no body present!') if body.nil?
-
       context.setup << self.class.name
     end
 
