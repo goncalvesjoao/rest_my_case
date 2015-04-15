@@ -14,12 +14,9 @@ module RestMyCase
 
     def self.perform(attributes = {})
       trial_case = TrialCase::Base.new self, attributes
-      attorney   = DefenseAttorney::Base.new trial_case
-      judge      = Judge::Base.new trial_case
 
-      attorney.build_case_for_the_defendant
-
-      judge.execute_the_sentence
+      DefenseAttorney::Base.new(trial_case).build_case_for_the_defendant
+      Judge::Base.new(trial_case).execute_the_sentence
 
       trial_case.context
     end
@@ -41,11 +38,12 @@ module RestMyCase
 
     ##################### INSTANCE METHODS BELLOW ###################
 
-    attr_reader :context, :options
+    attr_reader :context, :dependent_use_case, :options
 
-    def initialize(context, options = {})
-      @context = context
-      @options = options.dup
+    def initialize(context, dependent_use_case = nil)
+      @options            = {}
+      @context            = context
+      @dependent_use_case = dependent_use_case
     end
 
     def setup;  end
@@ -57,7 +55,7 @@ module RestMyCase
     def final; end
 
     def abort
-      options[:should_abort] = true
+      silent_abort? ? dependent_use_case.abort : (options[:should_abort] = true)
     end
 
     def abort!
@@ -78,6 +76,14 @@ module RestMyCase
 
     def skip!
       skip && raise(Errors::Skip)
+    end
+
+    protected #################### PROTECTED ####################
+
+    def silent_abort?
+      return false unless dependent_use_case
+
+      RestMyCase.get_config :silence_dependencies_abort, dependent_use_case.class
     end
 
   end

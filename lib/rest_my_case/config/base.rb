@@ -3,8 +3,6 @@ module RestMyCase
 
     module Base
 
-      include Shared
-
       attr_accessor :silence_dependencies_abort
 
     end

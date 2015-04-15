@@ -3,11 +3,10 @@ module RestMyCase
 
     class General
 
-      include Shared
+      include Base
 
       def initialize
-        @dependencies_first         = true
-        @parent_dependencies_first  = true
+        @silence_dependencies_abort = false
       end
 
       def get(attribute, use_case)

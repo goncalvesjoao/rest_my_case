@@ -1,6 +1,5 @@
 require 'ostruct'
 
-require "rest_my_case/config/shared"
 require "rest_my_case/config/base"
 require "rest_my_case/config/general"
 
