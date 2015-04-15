@@ -9,7 +9,7 @@ module RestMyCase
         @use_case_that_aborted = false
       end
 
-      def execute_the_sentence
+      def determine_the_sentence
         run_setup_methods
         run_perform_methods
         run_rollback_methods
@@ -36,12 +36,12 @@ module RestMyCase
         return nil unless @use_case_that_aborted
 
         @performed_use_cases.reverse.each do |use_case|
-          run_method(:rollback, use_case)
+          method_aborts?(:rollback, use_case)
         end
       end
 
       def run_final_methods
-        @trial_case.use_cases.each { |use_case| run_method(:final, use_case) }
+        @trial_case.use_cases.each { |use_case| method_aborts?(:final, use_case) }
       end
 
       private #################### PRIVATE ######################
@@ -60,18 +60,14 @@ module RestMyCase
 
       def method_aborts?(method_name, use_case)
         begin
-          run_method(method_name, use_case)
+          use_case.send(method_name)
 
           use_case.options[:should_abort] && @use_case_that_aborted = use_case
-        rescue Errors::Skip => exception
+        rescue Errors::Skip
           false
-        rescue Errors::Abort => exception
+        rescue Errors::Abort
           @use_case_that_aborted = use_case
         end
-      end
-
-      def run_method(method_name, use_case)
-        use_case.send(method_name)
       end
 
     end

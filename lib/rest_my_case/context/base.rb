@@ -1,7 +1,9 @@
 module RestMyCase
-  module TrialCase
+  module Context
 
-    class Context < OpenStruct
+    class Base < OpenStruct
+
+      include ActiveModel::Serialization if defined?(ActiveModel)
 
       def errors
         @errors ||= Hash.new { |hash, key| hash[key] = [] }
@@ -13,11 +15,9 @@ module RestMyCase
 
       alias :ok? :valid?
 
-      def serializable_hash(options = nil)
-        marshal_dump
-      end
+      alias :attributes :marshal_dump
 
-      alias :to_hash :serializable_hash
+      alias :to_hash :attributes
 
     end
 

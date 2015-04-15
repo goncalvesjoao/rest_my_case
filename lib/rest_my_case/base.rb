@@ -4,6 +4,8 @@ module RestMyCase
 
     extend Config::Base
 
+    TRIAL_COURT = Trial::Court.new Judge::Base, DefenseAttorney::Base
+
     def self.depends(*use_cases)
       dependencies.push *use_cases
     end
@@ -13,12 +15,7 @@ module RestMyCase
     end
 
     def self.perform(attributes = {})
-      trial_case = TrialCase::Base.new self, attributes
-
-      DefenseAttorney::Base.new(trial_case).build_case_for_the_defendant
-      Judge::Base.new(trial_case).execute_the_sentence
-
-      trial_case.context
+      TRIAL_COURT.execute([self], attributes)
     end
 
     def self.context_accessor(*methods)
@@ -81,7 +78,7 @@ module RestMyCase
     protected #################### PROTECTED ####################
 
     def silent_abort?
-      return false unless dependent_use_case
+      return false if dependent_use_case.nil?
 
       RestMyCase.get_config :silence_dependencies_abort, dependent_use_case.class
     end

@@ -1,120 +1,61 @@
 module Perform
 
-  class ValidateName < RestMyCase::Base
+  class UseCaseWrapper < RestMyCase::Base
+    def flow_control(method)
+      id = "#{self.class.name}_#{method}"
+
+      context.fail        ||= []
+      context.fail_bang   ||= []
+      context.skip        ||= []
+      context.skip_bang   ||= []
+      context.abort       ||= []
+      context.abort_bang  ||= []
+      context.setup       ||= []
+      context.perform     ||= []
+      context.rollback    ||= []
+      context.final       ||= []
+
+      fail    if context.fail.include? id
+      fail!   if context.fail_bang.include? id
+      skip    if context.skip.include? id
+      skip!   if context.skip_bang.include? id
+      abort   if context.abort.include? id
+      abort!  if context.abort_bang.include? id
+
+      context.send(method) << self.class.name
+    end
+
     def setup
-      context.setup << self.class.name
+      flow_control :setup
     end
 
     def perform
-      context.perform << self.class.name
+      flow_control :perform
     end
 
     def rollback
-      context.rollback << self.class.name
+      flow_control :rollback
     end
 
     def final
-      context.final << self.class.name
+      flow_control :final
     end
   end
 
-  class ValidateBody < RestMyCase::Base
-    def setup
-      context.setup << self.class.name
-    end
+  class ValidateName < UseCaseWrapper; end
 
-    def perform
-      context.perform << self.class.name
-    end
+  class ValidateBody < UseCaseWrapper; end
 
-    def rollback
-      context.rollback << self.class.name
-    end
-
-    def final
-      context.final << self.class.name
-    end
-  end
-
-  class Validations < RestMyCase::Base
+  class Validations < UseCaseWrapper
     depends ValidateName, ValidateBody
-
-    def setup
-      context.setup << self.class.name
-    end
-
-    def perform
-      context.perform << self.class.name
-    end
-
-    def rollback
-      context.rollback << self.class.name
-    end
-
-    def final
-      context.final << self.class.name
-    end
   end
 
-  class BuildPost < RestMyCase::Base
-    def setup
-      context.setup = []
-      context.perform = []
-      context.rollback = []
-      context.final = []
+  class BuildPost < UseCaseWrapper; end
 
-      context.setup << self.class.name
-    end
+  class SavePost < UseCaseWrapper; end
 
-    def perform
-      context.perform << self.class.name
-    end
-
-    def rollback
-      context.rollback << self.class.name
-    end
-
-    def final
-      context.final << self.class.name
-    end
-  end
-
-  class SavePost < RestMyCase::Base
-    def setup
-      context.setup << self.class.name
-    end
-
-    def perform
-      context.perform << self.class.name
-    end
-
-    def rollback
-      context.rollback << self.class.name
-    end
-
-    def final
-      context.final << self.class.name
-    end
-  end
-
-  class CreatePost < RestMyCase::Base
+  class CreatePost < UseCaseWrapper
     depends BuildPost, Validations, SavePost
-
-    def setup
-      context.setup << self.class.name
-    end
-
-    def perform
-      context.perform << self.class.name
-    end
-
-    def rollback
-      context.rollback << self.class.name
-    end
-
-    def final
-      context.final << self.class.name
-    end
   end
 
 end
