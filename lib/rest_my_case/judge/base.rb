@@ -14,9 +14,11 @@ module RestMyCase
         run_perform_methods
         run_rollback_methods
         run_final_methods
+
+        @trial_case.aborted = !!@use_case_that_aborted
       end
 
-      protected #################### PROTECTED ####################
+      protected ######################## PROTECTED #############################
 
       def run_setup_methods
         @trial_case.use_cases.each do |use_case|
@@ -41,10 +43,12 @@ module RestMyCase
       end
 
       def run_final_methods
-        @trial_case.use_cases.each { |use_case| method_aborts?(:final, use_case) }
+        @trial_case.use_cases.each do |use_case|
+          method_aborts?(:final, use_case)
+        end
       end
 
-      private #################### PRIVATE ######################
+      private ########################### PRIVATE ##############################
 
       def method_setup_has_aborted(use_case)
         method_aborts?(:setup, use_case)

@@ -6,16 +6,22 @@ module RestMyCase
 
     TRIAL_COURT = Trial::Court.new Judge::Base, DefenseAttorney::Base
 
-    def self.depends(*use_cases)
-      dependencies.push *use_cases
+    def self.depends(*use_case_classes)
+      dependencies.push *use_case_classes
     end
 
     def self.dependencies
       @dependencies ||= []
     end
 
-    def self.perform(attributes = {})
-      TRIAL_COURT.execute([self], attributes)
+    def self.perform(attributes = nil)
+      attributes ||= {}
+
+      unless attributes.respond_to?(:to_hash)
+        raise ArgumentError.new('Must respond_to method #to_hash')
+      end
+
+      TRIAL_COURT.execute([self], attributes.to_hash).context
     end
 
     def self.context_accessor(*methods)
@@ -33,7 +39,7 @@ module RestMyCase
       methods.each { |method| define_method(method) { context.send(method) } }
     end
 
-    ##################### INSTANCE METHODS BELLOW ###################
+    ######################## INSTANCE METHODS BELLOW ###########################
 
     attr_reader :context, :dependent_use_case, :options
 
@@ -50,6 +56,16 @@ module RestMyCase
     def rollback; end
 
     def final; end
+
+    def invoke(*use_case_classes)
+      TRIAL_COURT.execute(use_case_classes, context.to_hash).context
+    end
+
+    def invoke!(*use_case_classes)
+      TRIAL_COURT.execute(use_case_classes, context).tap do |trial_case|
+        abort if trial_case.aborted
+      end.context
+    end
 
     def abort
       silent_abort? ? dependent_use_case.abort : (options[:should_abort] = true)
@@ -75,7 +91,7 @@ module RestMyCase
       skip && raise(Errors::Skip)
     end
 
-    protected #################### PROTECTED ####################
+    protected ######################## PROTECTED ###############################
 
     def silent_abort?
       return false if dependent_use_case.nil?

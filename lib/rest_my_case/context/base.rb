@@ -3,7 +3,13 @@ module RestMyCase
 
     class Base < OpenStruct
 
+      alias :attributes :marshal_dump
+
       include ActiveModel::Serialization if defined?(ActiveModel)
+
+      def to_hash
+        Marshal.load Marshal.dump(attributes)
+      end
 
       def errors
         @errors ||= Hash.new { |hash, key| hash[key] = [] }
@@ -14,10 +20,6 @@ module RestMyCase
       end
 
       alias :ok? :valid?
-
-      alias :attributes :marshal_dump
-
-      alias :to_hash :attributes
 
     end
 

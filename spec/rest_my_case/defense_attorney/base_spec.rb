@@ -3,6 +3,8 @@ require 'spec_helper'
 describe RestMyCase::DefenseAttorney::Base do
 
   let(:use_cases) do
+    trial_case = RestMyCase::Trial::Case.new(use_case_classes, id: 1)
+
     described_class.new(trial_case).build_case_for_the_defendant
 
     trial_case.use_cases
@@ -28,7 +30,7 @@ describe RestMyCase::DefenseAttorney::Base do
 
   context "When a use case depends on other use cases" do
 
-    let(:trial_case) { RestMyCase::Trial::Case.new([DefenseAttorney::UseCaseWrapper], id: 1) }
+    let(:use_case_classes) { [DefenseAttorney::UseCaseWrapper] }
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::BuilEvent,
@@ -41,9 +43,9 @@ describe RestMyCase::DefenseAttorney::Base do
 
   end
 
-  context "When a use case inherits from another that also has its own dependencies" do
+  context "When a use case inherits from another that also has dependencies" do
 
-    let(:trial_case) { RestMyCase::Trial::Case.new([DefenseAttorney::CreatePostWithComments], id: 1) }
+    let(:use_case_classes) { [DefenseAttorney::CreatePostWithComments] }
 
     it_behaves_like "a porper shepherd", [
       DefenseAttorney::BuilEvent,

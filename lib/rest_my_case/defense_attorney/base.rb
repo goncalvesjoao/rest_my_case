@@ -9,12 +9,12 @@ module RestMyCase
 
       def build_case_for_the_defendant
         @trial_case.use_cases =
-          @trial_case.defendant.use_cases.map do |use_case_class|
+          @trial_case.defendant.use_case_classes.map do |use_case_class|
             all_dependencies(use_case_class)
           end.flatten
       end
 
-      protected ###################### PROTECTED #########################
+      protected ######################## PROTECTED #############################
 
       def all_dependencies(use_case_class)
         return [] unless use_case_class.respond_to? :dependencies
@@ -23,7 +23,7 @@ module RestMyCase
         dependencies_including_itself_last(use_case_class, nil)
       end
 
-      private ######################## PRIVATE ##########################
+      private ########################### PRIVATE ##############################
 
       def dependencies_including_itself_last(use_case_class, dependent_use_case)
         return [] unless use_case_class.superclass.respond_to? :dependencies

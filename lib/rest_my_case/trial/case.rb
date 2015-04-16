@@ -3,20 +3,23 @@ module RestMyCase
 
     class Case
 
-      attr_accessor :use_cases
+      attr_accessor :use_cases, :aborted
 
       attr_reader :context, :defendant
 
-      def initialize(use_case_classes, attributes = {})
-        attributes ||= {}
+      def initialize(use_case_classes, attributes)
+        @aborted   = false
+        @context   = build_context(attributes)
+        @defendant = Defendant.new use_case_classes
+        @use_cases = []
+      end
 
-        unless attributes.respond_to?(:to_hash)
-          raise ArgumentError.new('Must respond_to method #to_hash')
-        end
+      protected ######################## PROTECTED #############################
 
-        @context    = Context::Base.new attributes.to_hash
-        @defendant  = Defendant.new use_case_classes
-        @use_cases  = []
+      def build_context(attributes)
+        return attributes if attributes.is_a?(Context::Base)
+
+        Context::Base.new attributes
       end
 
     end

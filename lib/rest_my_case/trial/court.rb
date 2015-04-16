@@ -10,7 +10,7 @@ module RestMyCase
 
         judge_class.new(trial_case).determine_the_sentence
 
-        trial_case.context
+        trial_case
       end
 
     end

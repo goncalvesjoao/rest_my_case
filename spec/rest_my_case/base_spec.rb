@@ -71,10 +71,35 @@ describe RestMyCase::Base do
 
   describe ".perform" do
 
+    context "When something that doesn't responds to #to_hash is passed down" do
+
+      it "should raise an exception" do
+        expect { Perform::CreatePost.perform(Object.new) }.to \
+          raise_error(ArgumentError)
+      end
+
+    end
+
+    context "When nil is passed down" do
+
+      it "should NOT raise an exception" do
+        expect { Perform::CreatePost.perform(nil) }.not_to raise_error
+      end
+
+    end
+
+    context "When nothing is passed down" do
+
+      it "should NOT raise an exception" do
+        expect { Perform::CreatePost.perform }.not_to raise_error
+      end
+
+    end
+
     context "When a use case calls #fail during the setup process" do
       before do
         @context = Perform::CreatePost.perform \
-          fail: ['Perform::ValidateName_setup']
+          fail: ['Perform::ValidateName_setup', 'Perform::ValidateBody_setup']
       end
 
       it "context should reflect an invalid state" do
@@ -274,6 +299,143 @@ describe RestMyCase::Base do
           expect(@context.final.length).to be 7
         end
 
+      end
+
+    end
+
+  end
+
+  describe "#invoke" do
+
+    class Perform::Invoker < Perform::UseCaseWrapper
+      def perform
+        super
+        invoke Perform::BuildPost, Perform::Validations, Perform::SavePost
+      end
+    end
+
+    it "should invoke other use cases with the invoker's cloned context and they can't alter the invoker's context" do
+      context = Perform::Invoker.perform
+
+      expect(context.setup.length).to be 2
+      expect(context.perform.length).to be 2
+      expect(context.rollback.length).to be 0
+      expect(context.final.length).to be 2
+    end
+
+  end
+
+  describe "#invoke!" do
+
+    context "when the invokees don't abort" do
+
+      class Perform::ScreammingInvoker < Perform::UseCaseWrapper
+        def perform
+          super
+          invoke! Perform::BuildPost, Perform::Validations, Perform::SavePost
+        end
+      end
+
+      it "should invoke other use cases with the invoker's context and actually alter it" do
+        @context = Perform::ScreammingInvoker.perform
+
+        expect(@context.setup).to eq [
+          "Perform::UseCaseWrapper",
+          "Perform::ScreammingInvoker",
+          "Perform::UseCaseWrapper",
+          "Perform::BuildPost",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateName",
+          "Perform::ValidateBody",
+          "Perform::Validations",
+          "Perform::UseCaseWrapper",
+          "Perform::SavePost"
+        ]
+        expect(@context.perform).to eq [
+          "Perform::UseCaseWrapper",
+          "Perform::ScreammingInvoker",
+          "Perform::UseCaseWrapper",
+          "Perform::BuildPost",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateName",
+          "Perform::ValidateBody",
+          "Perform::Validations",
+          "Perform::UseCaseWrapper",
+          "Perform::SavePost"
+        ]
+        expect(@context.rollback).to eq []
+        expect(@context.final).to eq [
+          "Perform::UseCaseWrapper",
+          "Perform::BuildPost",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateName",
+          "Perform::ValidateBody",
+          "Perform::Validations",
+          "Perform::UseCaseWrapper",
+          "Perform::SavePost",
+          "Perform::UseCaseWrapper",
+          "Perform::ScreammingInvoker"
+        ]
+      end
+
+    end
+
+    context "when the invokees abort" do
+
+      class Perform::Validations2 < Perform::UseCaseWrapper
+        def perform
+          super
+
+          invoke! Perform::ValidateName, Perform::ValidateBody
+        end
+      end
+
+      class Perform::CreatePost2 < Perform::UseCaseWrapper
+        depends Perform::BuildPost, Perform::Validations2, Perform::SavePost
+      end
+
+      before do
+        @context = Perform::CreatePost2.perform \
+          fail: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform']
+      end
+
+      it "invoker should abort the process it his invokees have also aborted" do
+        expect(@context.setup).to eq [
+          "Perform::UseCaseWrapper",
+          "Perform::BuildPost",
+          "Perform::Validations2",
+          "Perform::SavePost",
+          "Perform::CreatePost2",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateName",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateBody"
+        ]
+        expect(@context.perform).to eq [
+          "Perform::UseCaseWrapper",
+          "Perform::BuildPost",
+          "Perform::Validations2",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateName"
+        ]
+        expect(@context.rollback).to eq [
+          "Perform::ValidateName",
+          "Perform::UseCaseWrapper",
+          "Perform::Validations2",
+          "Perform::BuildPost",
+          "Perform::UseCaseWrapper"
+        ]
+        expect(@context.final).to eq [
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateName",
+          "Perform::UseCaseWrapper",
+          "Perform::ValidateBody",
+          "Perform::UseCaseWrapper",
+          "Perform::BuildPost",
+          "Perform::Validations2",
+          "Perform::SavePost",
+          "Perform::CreatePost2"
+        ]
       end
 
     end
