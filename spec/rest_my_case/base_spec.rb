@@ -96,10 +96,10 @@ describe RestMyCase::Base do
 
     end
 
-    context "When a use case calls #fail during the setup process" do
+    context "When a use case calls #error during the setup process" do
       before do
         @context = Perform::CreatePost.perform \
-          fail: ['Perform::ValidateName_setup', 'Perform::ValidateBody_setup']
+          error: ['Perform::ValidateName_setup', 'Perform::ValidateBody_setup']
       end
 
       it "context should reflect an invalid state" do
@@ -118,10 +118,10 @@ describe RestMyCase::Base do
       end
     end
 
-    context "When a use case calls #fail! during the setup process" do
+    context "When a use case calls #error! during the setup process" do
       before do
         @context = Perform::CreatePost.perform \
-          fail_bang: ['Perform::ValidateName_setup']
+          error_bang: ['Perform::ValidateName_setup']
       end
 
       it "context should reflect an invalid state" do
@@ -219,10 +219,10 @@ describe RestMyCase::Base do
       before  { Perform::Validations.silence_dependencies_abort = true }
       after   { Perform::Validations.silence_dependencies_abort = nil }
 
-      context "When a use case calls #fail during the setup process" do
+      context "When a use case calls #error during the setup process" do
         before do
           @context = Perform::CreatePost.perform \
-            fail: ['Perform::ValidateName_setup', 'Perform::ValidateBody_setup']
+            error: ['Perform::ValidateName_setup', 'Perform::ValidateBody_setup']
         end
 
         it "context should reflect an invalid state" do
@@ -242,11 +242,11 @@ describe RestMyCase::Base do
 
       end
 
-      context "When a use case calls #fail during the perform process" do
+      context "When a use case calls #error during the perform process" do
 
         before do
           @context = Perform::CreatePost.perform \
-            fail: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform']
+            error: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform']
         end
 
         it "context should reflect an invalid state" do
@@ -277,11 +277,11 @@ describe RestMyCase::Base do
       end
       after { RestMyCase.reset_config }
 
-      context "When a use case calls #fail during the perform process" do
+      context "When a use case calls #error during the perform process" do
 
         before do
           @context = Perform::CreatePost.perform \
-            fail: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform', 'Perform::BuildPost_perform', 'Perform::SavePost_perform']
+            error: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform', 'Perform::BuildPost_perform', 'Perform::SavePost_perform']
         end
 
         it "context should reflect an invalid state" do
@@ -396,7 +396,7 @@ describe RestMyCase::Base do
 
       before do
         @context = Perform::CreatePost2.perform \
-          fail: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform']
+          error: ['Perform::ValidateName_perform', 'Perform::ValidateBody_perform']
       end
 
       it "invoker should abort the process it his invokees have also aborted" do

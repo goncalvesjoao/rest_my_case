@@ -7,5 +7,7 @@ module RestMyCase
 
     class Abort < Base; end
 
+    class Error < Base; end
+
   end
 end

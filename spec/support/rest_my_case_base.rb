@@ -3,11 +3,11 @@ module RestMyCaseBase
   class BuildPost < RestMyCase::Base; end
 
   class ValidateName < RestMyCase::Base
-    def perform; fail('no name present!'); end
+    def perform; error('no name present!'); end
   end
 
   class ValidateBody < RestMyCase::Base
-    def perform; fail('no body present!'); end
+    def perform; error('no body present!'); end
   end
 
   class Validations < RestMyCase::Base

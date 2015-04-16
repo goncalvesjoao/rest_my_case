@@ -18,7 +18,7 @@ module RestMyCase
       attributes ||= {}
 
       unless attributes.respond_to?(:to_hash)
-        raise ArgumentError, 'Must respond_to method #to_hash'
+        fail ArgumentError, 'Must respond_to method #to_hash'
       end
 
       TRIAL_COURT.execute([self], attributes.to_hash).context
@@ -72,15 +72,15 @@ module RestMyCase
     end
 
     def abort!
-      abort && raise(Errors::Abort)
+      abort && fail(Errors::Abort)
     end
 
-    def fail(message = '')
+    def error(message = '')
       abort && context.errors[self.class.name].push(message)
     end
 
-    def fail!(message = '')
-      fail(message) && raise(Errors::Abort)
+    def error!(message = '')
+      error(message) && fail(Errors::Abort)
     end
 
     def skip
@@ -88,7 +88,7 @@ module RestMyCase
     end
 
     def skip!
-      skip && raise(Errors::Skip)
+      skip && fail(Errors::Skip)
     end
 
     protected ######################## PROTECTED ###############################

@@ -4,8 +4,8 @@ module Perform
     def flow_control(method)
       id = "#{self.class.name}_#{method}"
 
-      context.fail        ||= []
-      context.fail_bang   ||= []
+      context.error       ||= []
+      context.error_bang  ||= []
       context.skip        ||= []
       context.skip_bang   ||= []
       context.abort       ||= []
@@ -15,8 +15,8 @@ module Perform
       context.rollback    ||= []
       context.final       ||= []
 
-      fail    if context.fail.include? id
-      fail!   if context.fail_bang.include? id
+      error   if context.error.include? id
+      error!  if context.error_bang.include? id
       skip    if context.skip.include? id
       skip!   if context.skip_bang.include? id
       abort   if context.abort.include? id
