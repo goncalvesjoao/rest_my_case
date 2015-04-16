@@ -20,7 +20,7 @@ module RestMyCase
         return [] unless use_case_class.respond_to? :dependencies
 
         all_dependencies(use_case_class.superclass) |
-        dependencies_including_itself_last(use_case_class, nil)
+          dependencies_including_itself_last(use_case_class, nil)
       end
 
       private ########################### PRIVATE ##############################

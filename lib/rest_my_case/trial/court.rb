@@ -1,7 +1,7 @@
 module RestMyCase
   module Trial
 
-    class Court < Struct.new(:judge_class, :defense_attorney_class)
+    Court = Struct.new(:judge_class, :defense_attorney_class) do
 
       def execute(use_case_classes, attributes = {})
         trial_case = Case.new(use_case_classes, attributes)

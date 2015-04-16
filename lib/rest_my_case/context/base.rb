@@ -3,7 +3,7 @@ module RestMyCase
 
     class Base < OpenStruct
 
-      alias :attributes :marshal_dump
+      alias_method :attributes, :marshal_dump
 
       include ActiveModel::Serialization if defined?(ActiveModel)
 
@@ -19,7 +19,7 @@ module RestMyCase
         errors.empty?
       end
 
-      alias :ok? :valid?
+      alias_method :ok?, :valid?
 
     end
 

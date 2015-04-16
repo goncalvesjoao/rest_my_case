@@ -1,0 +1,30 @@
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/DotPosition:
+  Enabled: false
+
+Style/Encoding:
+  Enabled: true
+  EnforcedStyle: when_needed
+
+AllCops:
+  Exclude:
+    - '**/Rakefile'
+    - '**/*.gemspec'
+    - '**/console'
+    - 'spec/**/*'
+    - 'tmp/**/*'
+    - 'pkg/**/*'
+
+Documentation:
+  Enabled: false

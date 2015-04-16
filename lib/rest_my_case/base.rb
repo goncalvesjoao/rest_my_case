@@ -7,7 +7,7 @@ module RestMyCase
     TRIAL_COURT = Trial::Court.new Judge::Base, DefenseAttorney::Base
 
     def self.depends(*use_case_classes)
-      dependencies.push *use_case_classes
+      dependencies.push(*use_case_classes)
     end
 
     def self.dependencies
@@ -18,7 +18,7 @@ module RestMyCase
       attributes ||= {}
 
       unless attributes.respond_to?(:to_hash)
-        raise ArgumentError.new('Must respond_to method #to_hash')
+        raise ArgumentError, 'Must respond_to method #to_hash'
       end
 
       TRIAL_COURT.execute([self], attributes.to_hash).context
