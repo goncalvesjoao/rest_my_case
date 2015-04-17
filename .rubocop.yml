@@ -10,13 +10,6 @@ Style/EmptyLinesAroundModuleBody:
 Style/EmptyLinesAroundClassBody:
   Enabled: false
 
-Style/DotPosition:
-  Enabled: false
-
-Style/Encoding:
-  Enabled: true
-  EnforcedStyle: when_needed
-
 AllCops:
   Exclude:
     - '**/Rakefile'
@@ -25,6 +18,8 @@ AllCops:
     - 'spec/**/*'
     - 'tmp/**/*'
     - 'pkg/**/*'
+    - 'lib/rest_my_case/accusation_attorneys/**/*'
+    - 'lib/rest_my_case/validator/errors.rb'
 
 Documentation:
   Enabled: false

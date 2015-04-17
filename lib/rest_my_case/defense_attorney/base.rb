@@ -9,7 +9,7 @@ module RestMyCase
 
       def build_case_for_the_defendant
         @trial_case.use_cases =
-          @trial_case.defendant.use_case_classes.map do |use_case_class|
+          @trial_case.use_case_classes.map do |use_case_class|
             all_dependencies(use_case_class)
           end.flatten
       end
@@ -17,17 +17,15 @@ module RestMyCase
       protected ######################## PROTECTED #############################
 
       def all_dependencies(use_case_class)
-        return [] unless use_case_class.respond_to? :dependencies
+        return [] if use_case_class == @trial_case.last_ancestor
 
         all_dependencies(use_case_class.superclass) |
-          dependencies_including_itself_last(use_case_class, nil)
+          dependencies_including_itself(use_case_class, @trial_case.defendant)
       end
 
       private ########################### PRIVATE ##############################
 
-      def dependencies_including_itself_last(use_case_class, dependent_use_case)
-        return [] unless use_case_class.superclass.respond_to? :dependencies
-
+      def dependencies_including_itself(use_case_class, dependent_use_case)
         use_case = use_case_class.new(@trial_case.context, dependent_use_case)
 
         dependencies(use_case).push use_case
@@ -35,7 +33,7 @@ module RestMyCase
 
       def dependencies(use_case)
         use_case.class.dependencies.map do |dependency|
-          dependencies_including_itself_last dependency, use_case
+          dependencies_including_itself dependency, use_case
         end
       end
 

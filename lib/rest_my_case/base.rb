@@ -4,7 +4,10 @@ module RestMyCase
 
     extend Config::Base
 
-    TRIAL_COURT = Trial::Court.new Judge::Base, DefenseAttorney::Base
+    def self.trial_court
+      @trial_court ||= Trial::Court.new \
+        Judge::Base, DefenseAttorney::Base, RestMyCase::Base
+    end
 
     def self.depends(*use_case_classes)
       dependencies.push(*use_case_classes)
@@ -21,7 +24,7 @@ module RestMyCase
         fail ArgumentError, 'Must respond_to method #to_hash'
       end
 
-      TRIAL_COURT.execute([self], attributes.to_hash).context
+      trial_court.execute([self], attributes.to_hash).context
     end
 
     def self.context_accessor(*methods)
@@ -58,11 +61,11 @@ module RestMyCase
     def final; end
 
     def invoke(*use_case_classes)
-      TRIAL_COURT.execute(use_case_classes, context.to_hash).context
+      trial_court.execute(use_case_classes, context.to_hash).context
     end
 
     def invoke!(*use_case_classes)
-      TRIAL_COURT.execute(use_case_classes, context).tap do |trial_case|
+      trial_court.execute(use_case_classes, context).tap do |trial_case|
         abort if trial_case.aborted
       end.context
     end
@@ -93,10 +96,15 @@ module RestMyCase
 
     protected ######################## PROTECTED ###############################
 
+    def trial_court
+      self.class.trial_court
+    end
+
     def silent_abort?
       return false if dependent_use_case.nil?
 
-      RestMyCase.get_config :silence_dependencies_abort, dependent_use_case.class
+      RestMyCase.get_config \
+        :silence_dependencies_abort, dependent_use_case.class
     end
 
   end

@@ -295,7 +295,7 @@ describe RestMyCase::Base do
         it "context prove that only the correct method have ran" do
           expect(@context.setup.length).to be 7
           expect(@context.perform.length).to be 7
-          expect(@context.rollback.length).to be 7
+          expect(@context.rollback.length).to be 0
           expect(@context.final.length).to be 7
         end
 

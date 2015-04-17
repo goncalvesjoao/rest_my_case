@@ -15,7 +15,7 @@ module RestMyCase
         run_rollback_methods
         run_final_methods
 
-        @trial_case.aborted = !@use_case_that_aborted.nil?
+        @trial_case.should_abort = !@use_case_that_aborted.nil?
       end
 
       protected ######################## PROTECTED #############################

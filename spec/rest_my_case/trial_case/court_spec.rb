@@ -4,12 +4,14 @@ describe RestMyCase::Trial::Court do
 
   context "When using Judge::Base and DefenseAttorney::Base" do
     before do
-      @trial_court = described_class.new RestMyCase::Judge::Base, RestMyCase::DefenseAttorney::Base
+      @use_case_class = Class.new(RestMyCase::Base)
+      @trial_court = described_class.new \
+        RestMyCase::Judge::Base, RestMyCase::DefenseAttorney::Base, RestMyCase::Base
     end
 
     context "When something that responds to #to_hash is passed down" do
 
-      let(:context) { @trial_court.execute([Object], id: 1, name: '2').context }
+      let(:context) { @trial_court.execute([@use_case_class], id: 1, name: '2').context }
 
       it "should create a context with it" do
         expect(context).to be_a RestMyCase::Context::Base

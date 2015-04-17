@@ -3,7 +3,7 @@ require 'spec_helper'
 describe RestMyCase::DefenseAttorney::Base do
 
   let(:use_cases) do
-    trial_case = RestMyCase::Trial::Case.new(use_case_classes, id: 1)
+    trial_case = RestMyCase::Trial::Case.new(RestMyCase::Base, use_case_classes, id: 1)
 
     described_class.new(trial_case).build_case_for_the_defendant
 
