@@ -6,6 +6,7 @@ module RestMyCase
       include Base
 
       def initialize
+        @parent_dependencies_first  = false
         @silence_dependencies_abort = false
       end
 

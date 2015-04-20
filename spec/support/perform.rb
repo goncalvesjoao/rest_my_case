@@ -1,6 +1,6 @@
 module Perform
 
-  class UseCaseWrapper < RestMyCase::Base
+  class Test < RestMyCase::Base
     def flow_control(method)
       id = "#{self.class.name}_#{method}"
 
@@ -40,6 +40,12 @@ module Perform
     def final
       flow_control :final
     end
+  end
+
+  class Logger < Test; end
+
+  class UseCaseWrapper < Test
+    depends Logger
   end
 
   class ValidateName < UseCaseWrapper; end

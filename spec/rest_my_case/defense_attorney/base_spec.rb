@@ -48,20 +48,82 @@ describe RestMyCase::DefenseAttorney::Base do
     let(:use_case_classes) { [DefenseAttorney::CreatePostWithComments] }
 
     it_behaves_like "a porper shepherd", [
+      DefenseAttorney::BuildComments,
+      DefenseAttorney::SaveComments,
+      DefenseAttorney::CreateComments,
+      DefenseAttorney::AssignAttributes,
+      DefenseAttorney::BuildSomething,
+      DefenseAttorney::BuildPost,
+      DefenseAttorney::SavePost,
       DefenseAttorney::BuilEvent,
       DefenseAttorney::SaveEvent,
       DefenseAttorney::CreateEvent,
       DefenseAttorney::LogEvents,
       DefenseAttorney::AnalyseEvents,
-      DefenseAttorney::UseCaseWrapper,
-      DefenseAttorney::BuildPost,
-      DefenseAttorney::SavePost,
-      DefenseAttorney::CreatePost,
-      DefenseAttorney::BuildComments,
-      DefenseAttorney::SaveComments,
-      DefenseAttorney::CreateComments,
       DefenseAttorney::CreatePostWithComments
     ]
+
+  end
+
+  context "When general config has parent_dependencies_first = true" do
+
+    before do
+      RestMyCase.configure do |config|
+        config.parent_dependencies_first = true
+      end
+    end
+    after { RestMyCase.reset_config }
+
+    context "When a use case inherits from another that also has dependencies" do
+
+      let(:use_case_classes) { [DefenseAttorney::CreatePostWithComments] }
+
+      it_behaves_like "a porper shepherd", [
+        DefenseAttorney::BuilEvent,
+        DefenseAttorney::SaveEvent,
+        DefenseAttorney::CreateEvent,
+        DefenseAttorney::LogEvents,
+        DefenseAttorney::AnalyseEvents,
+        DefenseAttorney::BuildSomething,
+        DefenseAttorney::AssignAttributes,
+        DefenseAttorney::BuildPost,
+        DefenseAttorney::SavePost,
+        DefenseAttorney::BuildComments,
+        DefenseAttorney::SaveComments,
+        DefenseAttorney::CreateComments,
+        DefenseAttorney::CreatePostWithComments
+      ]
+
+    end
+
+  end
+
+  context "When dependent use_case has parent_dependencies_first = true" do
+
+    before { DefenseAttorney::BuildPost.parent_dependencies_first = true }
+    after  { DefenseAttorney::BuildPost.parent_dependencies_first = nil }
+
+    context "When a use case inherits from another that also has dependencies" do
+
+      let(:use_case_classes) { [DefenseAttorney::CreatePostWithComments] }
+
+      it_behaves_like "a porper shepherd", [
+        DefenseAttorney::BuildComments,
+        DefenseAttorney::SaveComments,
+        DefenseAttorney::CreateComments,
+        DefenseAttorney::BuildSomething,
+        DefenseAttorney::AssignAttributes,
+        DefenseAttorney::BuildPost,
+        DefenseAttorney::SavePost,
+        DefenseAttorney::BuilEvent,
+        DefenseAttorney::SaveEvent,
+        DefenseAttorney::CreateEvent,
+        DefenseAttorney::LogEvents,
+        DefenseAttorney::AnalyseEvents,
+        DefenseAttorney::CreatePostWithComments
+      ]
+
+    end
 
   end
 

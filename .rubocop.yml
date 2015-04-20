@@ -19,7 +19,6 @@ AllCops:
     - 'tmp/**/*'
     - 'pkg/**/*'
     - 'lib/rest_my_case/accusation_attorneys/**/*'
-    - 'lib/rest_my_case/validator/errors.rb'
 
 Documentation:
   Enabled: false

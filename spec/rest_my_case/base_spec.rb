@@ -111,10 +111,10 @@ describe RestMyCase::Base do
       end
 
       it "context prove that only the correct method have ran" do
-        expect(@context.setup.length).to be 3
+        expect(@context.setup.length).to be 4
         expect(@context.perform.length).to be 0
         expect(@context.rollback.length).to be 0
-        expect(@context.final.length).to be 7
+        expect(@context.final.length).to be 12
       end
     end
 
@@ -133,10 +133,10 @@ describe RestMyCase::Base do
       end
 
       it "context prove that only the correct method have ran" do
-        expect(@context.setup.length).to be 2
+        expect(@context.setup.length).to be 3
         expect(@context.perform.length).to be 0
         expect(@context.rollback.length).to be 0
-        expect(@context.final.length).to be 7
+        expect(@context.final.length).to be 12
       end
     end
 
@@ -151,10 +151,10 @@ describe RestMyCase::Base do
       end
 
       it "context prove that only the correct method have ran" do
-        expect(@context.setup.length).to be 2
+        expect(@context.setup.length).to be 3
         expect(@context.perform.length).to be 0
         expect(@context.rollback.length).to be 0
-        expect(@context.final.length).to be 7
+        expect(@context.final.length).to be 12
       end
     end
 
@@ -169,10 +169,10 @@ describe RestMyCase::Base do
       end
 
       it "context prove that only the correct method have ran" do
-        expect(@context.setup.length).to be 7
-        expect(@context.perform.length).to be 2
-        expect(@context.rollback.length).to be 3
-        expect(@context.final.length).to be 7
+        expect(@context.setup.length).to be 12
+        expect(@context.perform.length).to be 3
+        expect(@context.rollback.length).to be 4
+        expect(@context.final.length).to be 12
       end
     end
 
@@ -187,10 +187,10 @@ describe RestMyCase::Base do
       end
 
       it "context prove that only the correct method have ran" do
-        expect(@context.setup.length).to be 7
-        expect(@context.perform.length).to be 6
+        expect(@context.setup.length).to be 12
+        expect(@context.perform.length).to be 11
         expect(@context.rollback.length).to be 0
-        expect(@context.final.length).to be 7
+        expect(@context.final.length).to be 12
       end
     end
 
@@ -206,10 +206,10 @@ describe RestMyCase::Base do
       end
 
       it "context prove that only the correct method have ran" do
-        expect(@context.setup.length).to be 6
-        expect(@context.perform.length).to be 6
+        expect(@context.setup.length).to be 11
+        expect(@context.perform.length).to be 11
         expect(@context.rollback.length).to be 0
-        expect(@context.final.length).to be 7
+        expect(@context.final.length).to be 12
       end
 
     end
@@ -234,10 +234,10 @@ describe RestMyCase::Base do
         end
 
         it "context prove that only the correct method have ran" do
-          expect(@context.setup.length).to be 5
+          expect(@context.setup.length).to be 8
           expect(@context.perform.length).to be 0
           expect(@context.rollback.length).to be 0
-          expect(@context.final.length).to be 7
+          expect(@context.final.length).to be 12
         end
 
       end
@@ -258,10 +258,10 @@ describe RestMyCase::Base do
         end
 
         it "context prove that only the correct method have ran" do
-          expect(@context.setup.length).to be 7
-          expect(@context.perform.length).to be 5
-          expect(@context.rollback.length).to be 5
-          expect(@context.final.length).to be 7
+          expect(@context.setup.length).to be 12
+          expect(@context.perform.length).to be 8
+          expect(@context.rollback.length).to be 8
+          expect(@context.final.length).to be 12
         end
 
       end
@@ -293,10 +293,10 @@ describe RestMyCase::Base do
         end
 
         it "context prove that only the correct method have ran" do
-          expect(@context.setup.length).to be 7
-          expect(@context.perform.length).to be 7
+          expect(@context.setup.length).to be 12
+          expect(@context.perform.length).to be 12
           expect(@context.rollback.length).to be 0
-          expect(@context.final.length).to be 7
+          expect(@context.final.length).to be 12
         end
 
       end
@@ -340,40 +340,46 @@ describe RestMyCase::Base do
         @context = Perform::ScreammingInvoker.perform
 
         expect(@context.setup).to eq [
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ScreammingInvoker",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::BuildPost",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateName",
+          "Perform::Logger",
           "Perform::ValidateBody",
+          "Perform::Logger",
           "Perform::Validations",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::SavePost"
         ]
         expect(@context.perform).to eq [
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ScreammingInvoker",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::BuildPost",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateName",
+          "Perform::Logger",
           "Perform::ValidateBody",
+          "Perform::Logger",
           "Perform::Validations",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::SavePost"
         ]
         expect(@context.rollback).to eq []
         expect(@context.final).to eq [
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::BuildPost",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateName",
+          "Perform::Logger",
           "Perform::ValidateBody",
+          "Perform::Logger",
           "Perform::Validations",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::SavePost",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ScreammingInvoker"
         ]
       end
@@ -401,39 +407,47 @@ describe RestMyCase::Base do
 
       it "invoker should abort the process it his invokees have also aborted" do
         expect(@context.setup).to eq [
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::BuildPost",
+          "Perform::Logger",
           "Perform::Validations2",
+          "Perform::Logger",
           "Perform::SavePost",
+          "Perform::Logger",
           "Perform::CreatePost2",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateName",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateBody"
         ]
         expect(@context.perform).to eq [
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::BuildPost",
+          "Perform::Logger",
           "Perform::Validations2",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateName"
         ]
         expect(@context.rollback).to eq [
           "Perform::ValidateName",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::Validations2",
+          "Perform::Logger",
           "Perform::BuildPost",
-          "Perform::UseCaseWrapper"
+          "Perform::Logger"
         ]
         expect(@context.final).to eq [
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateName",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::ValidateBody",
-          "Perform::UseCaseWrapper",
+          "Perform::Logger",
           "Perform::BuildPost",
+          "Perform::Logger",
           "Perform::Validations2",
+          "Perform::Logger",
           "Perform::SavePost",
+          "Perform::Logger",
           "Perform::CreatePost2"
         ]
       end

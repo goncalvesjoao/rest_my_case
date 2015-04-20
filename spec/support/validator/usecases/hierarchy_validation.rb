@@ -1,6 +1,6 @@
 module HierarchyValidation
 
-  class Father < RestMyCase::Validator::Base
+  class Father < RestMyCase::Validator
 
     target :post
 

@@ -1,5 +1,5 @@
 module RestMyCase
-  module Validator
+  module AccusationAttorneys
 
     class Errors
       include Enumerable

@@ -11,20 +11,18 @@ require 'rest_my_case/judge/base'
 require 'rest_my_case/trial/case'
 require 'rest_my_case/trial/court'
 
-require 'rest_my_case/base'
-
 require 'rest_my_case/accusation_attorneys/helper_methods'
 require 'rest_my_case/accusation_attorneys/base'
 require 'rest_my_case/accusation_attorneys/each'
 require 'rest_my_case/accusation_attorneys/custom'
+require 'rest_my_case/accusation_attorneys/errors'
 # require 'rest_my_case/accusation_attorneys/format'
 # require 'rest_my_case/accusation_attorneys/length'
 require 'rest_my_case/accusation_attorneys/presence'
 # require 'rest_my_case/accusation_attorneys/numericality'
 
-require 'rest_my_case/validator/class_methods'
-require 'rest_my_case/validator/errors'
-require 'rest_my_case/validator/base'
+require 'rest_my_case/base'
+require 'rest_my_case/validator'
 
 module RestMyCase
 

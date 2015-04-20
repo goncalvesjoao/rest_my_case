@@ -14,7 +14,17 @@ module DefenseAttorney
 
   class AnalyseEvents < RestMyCase::Base; end
 
-  class BuildPost < RestMyCase::Base; end
+  class BuildSomething < RestMyCase::Base; end
+
+  class AssignAttributes < RestMyCase::Base; end
+
+  class Builder < RestMyCase::Base
+    depends BuildSomething
+  end
+
+  class BuildPost < Builder
+    depends AssignAttributes
+  end
 
   class SavePost < RestMyCase::Base; end
 
