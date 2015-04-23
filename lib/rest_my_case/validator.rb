@@ -30,7 +30,7 @@ module RestMyCase
       end
 
       def validate(*args, &block)
-        validators[nil] << CustomValidator.new(args, &block)
+        validators[nil] << AccusationAttorneys::Custom.new(args, &block)
       end
 
       def validates_with(*args, &block)
