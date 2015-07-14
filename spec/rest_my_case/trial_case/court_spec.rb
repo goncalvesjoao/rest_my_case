@@ -6,7 +6,7 @@ describe RestMyCase::Trial::Court do
     before do
       @use_case_class = Class.new(RestMyCase::Base)
       @trial_court = described_class.new \
-        RestMyCase::Judge::Base, RestMyCase::DefenseAttorney::Base, RestMyCase::Base
+        RestMyCase::Judge::Base, RestMyCase::DefenseAttorney::Base, RestMyCase::Base, RestMyCase::Context::Base
     end
 
     context "When something that responds to #to_hash is passed down" do

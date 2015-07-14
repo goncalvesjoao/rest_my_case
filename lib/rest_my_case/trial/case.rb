@@ -5,10 +5,14 @@ module RestMyCase
 
       attr_accessor :use_cases, :should_abort
 
-      attr_reader :context, :defendant, :last_ancestor, :defendant_class
+      attr_reader :context,
+                  :defendant,
+                  :last_ancestor,
+                  :context_class,
+                  :defendant_class
 
-      def initialize(last_ancestor, use_case_classes, attributes)
-        @context         = build_context attributes
+      def initialize(last_ancestor, context_class, use_case_classes, attributes)
+        @context         = build_context attributes, context_class
         @last_ancestor   = last_ancestor
         @defendant_class = build_defendant(last_ancestor, use_case_classes)
         @defendant       = @defendant_class.new @context
@@ -20,10 +24,10 @@ module RestMyCase
 
       protected ######################## PROTECTED #############################
 
-      def build_context(attributes)
-        return attributes if attributes.is_a?(Context::Base)
+      def build_context(attributes, context_class)
+        return attributes if attributes.is_a?(context_class)
 
-        Context::Base.new attributes
+        context_class.new attributes
       end
 
       def build_defendant(last_ancestor, use_case_classes)

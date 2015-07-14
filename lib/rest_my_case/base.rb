@@ -6,7 +6,7 @@ module RestMyCase
 
     def self.trial_court
       @trial_court ||= Trial::Court.new \
-        Judge::Base, DefenseAttorney::Base, RestMyCase::Base
+        Judge::Base, DefenseAttorney::Base, RestMyCase::Base, Context::Base
     end
 
     def self.depends(*use_case_classes)

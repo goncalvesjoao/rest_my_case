@@ -10,7 +10,7 @@ module RestMyCase
 
       def trial_court
         @trial_court ||= Trial::Court.new \
-          Judge::Base, DefenseAttorney::Base, RestMyCase::Validator
+          Judge::Base, DefenseAttorney::Base, Validator, Context::Base
       end
 
       def target_name
