@@ -21,6 +21,8 @@ module RestMyCase
 
       alias_method :ok?, :valid?
 
+      alias_method :success?, :ok?
+
     end
 
   end

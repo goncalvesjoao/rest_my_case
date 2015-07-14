@@ -7,6 +7,9 @@ require 'rest_my_case/config/base'
 require 'rest_my_case/config/general'
 require 'rest_my_case/defense_attorney/base'
 require 'rest_my_case/context/base'
+require 'rest_my_case/context/status/matcher'
+require 'rest_my_case/context/status/status'
+require 'rest_my_case/context/status/base'
 require 'rest_my_case/judge/base'
 require 'rest_my_case/trial/case'
 require 'rest_my_case/trial/court'
@@ -22,6 +25,7 @@ require 'rest_my_case/accusation_attorneys/presence'
 require 'rest_my_case/accusation_attorneys/numericality'
 
 require 'rest_my_case/base'
+require 'rest_my_case/with_status'
 require 'rest_my_case/validator'
 
 module RestMyCase
