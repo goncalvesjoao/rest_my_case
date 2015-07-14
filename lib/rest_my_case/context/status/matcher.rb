@@ -11,10 +11,6 @@ module RestMyCase
           @text = text
         end
 
-        def match?
-          match_as_setter? || match_as_question?
-        end
-
         def match_as_setter?
           !!(@text =~ STATUS_SETTER_REGEX)
         end

@@ -22,10 +22,12 @@ module RestMyCase
           end
         end
 
-        def respond_to?(method, _include_all = false)
-          matcher = ::RestMyCase::Context::Status::Matcher.new(method)
+        def to_s
+          current.to_s
+        end
 
-          matcher.match? || super
+        def ==(value)
+          to_s == value
         end
 
       end

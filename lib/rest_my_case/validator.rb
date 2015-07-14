@@ -1,6 +1,6 @@
 module RestMyCase
 
-  class Validator < RestMyCase::Base
+  class Validator < Base
 
     module ClassMethods
 
