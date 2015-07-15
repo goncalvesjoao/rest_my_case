@@ -108,6 +108,7 @@ describe RestMyCase::Base do
 
       it "context should contain only one error" do
         expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""]})
+        expect(@context.errors.full_messages).to eq ["Perform::ValidateName: "]
       end
 
       it "context prove that only the correct method have ran" do
@@ -130,6 +131,7 @@ describe RestMyCase::Base do
 
       it "context should contain only one error" do
         expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""]})
+        expect(@context.errors.full_messages).to eq ["Perform::ValidateName: "]
       end
 
       it "context prove that only the correct method have ran" do
@@ -231,6 +233,7 @@ describe RestMyCase::Base do
 
         it "context should contain only 2 errors" do
           expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""], "Perform::ValidateBody"=>[""]})
+          expect(@context.errors.full_messages).to eq ["Perform::ValidateName: ", "Perform::ValidateBody: "]
         end
 
         it "context prove that only the correct method have ran" do
@@ -255,6 +258,7 @@ describe RestMyCase::Base do
 
         it "context should contain only 2 errors" do
           expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""], "Perform::ValidateBody"=>[""]})
+          expect(@context.errors.full_messages).to eq ["Perform::ValidateName: ", "Perform::ValidateBody: "]
         end
 
         it "context prove that only the correct method have ran" do
@@ -290,6 +294,7 @@ describe RestMyCase::Base do
 
         it "context should contain only 4 errors" do
           expect(@context.errors).to match a_hash_including({"Perform::BuildPost"=>[""], "Perform::ValidateName"=>[""], "Perform::ValidateBody"=>[""], "Perform::SavePost"=>[""]})
+          expect(@context.errors.full_messages).to eq ["Perform::BuildPost: ", "Perform::ValidateName: ", "Perform::ValidateBody: ", "Perform::SavePost: "]
         end
 
         it "context prove that only the correct method have ran" do

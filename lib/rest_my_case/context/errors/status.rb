@@ -7,7 +7,9 @@ module RestMyCase
         def add(error, message)
           super
 
-          @context.status.send("#{message}!")
+          status = message.to_s.split(' - ')[0]
+
+          @context.status.send("#{status}!")
         end
 
       end
