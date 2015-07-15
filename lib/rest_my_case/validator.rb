@@ -6,8 +6,6 @@ module RestMyCase
 
       attr_writer :validators
 
-      attr_reader :clear_errors
-
       def trial_court
         @trial_court ||= Trial::Court.new \
           Judge::Base, DefenseAttorney::Base, Validator, Context::Base
@@ -19,10 +17,6 @@ module RestMyCase
 
       def target(target_name)
         @target_name = target_name
-      end
-
-      def clear_errors!
-        @clear_errors = true
       end
 
       def validators
@@ -46,12 +40,8 @@ module RestMyCase
       protected ######################## PROTECTED #############################
 
       def store_validators_by_attribute(validator)
-        if validator.respond_to?(:attributes) && !validator.attributes.empty?
-          validator.attributes.each do |attribute|
-            validators[attribute.to_sym] << validator
-          end
-        else
-          validators[nil] << validator
+        validator.attributes.each do |attribute|
+          validators[attribute.to_sym] << validator
         end
       end
 
@@ -77,15 +67,15 @@ module RestMyCase
     end
 
     def target
+      return nil if target_name.nil?
+
       respond_to?(target_name) ? send(target_name) : context.send(target_name)
     end
 
     def perform
       targets = [*target]
 
-      skip! if targets.empty?
-
-      if target.nil?
+      if targets.empty?
         error('no target to validate!')
       else
         error('unprocessable_entity') unless all_validations_green? targets
@@ -110,8 +100,6 @@ module RestMyCase
 
     def extend_errors_and_run_validations(object_to_validate)
       extend_errors_if_necessary object_to_validate
-
-      object_to_validate.errors.clear if self.class.clear_errors
 
       self.class.validators.values.flatten.uniq.each do |validator|
         next if validator_condition_fails(validator, object_to_validate)
