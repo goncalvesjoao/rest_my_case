@@ -20,11 +20,6 @@ module RestMyCase
         @messages = {}
       end
 
-      def initialize_dup(other) # :nodoc:
-        @messages = other.messages.dup
-        super
-      end
-
       # Clear the error messages.
       #
       #   person.errors.full_messages # => ["name can not be nil"]

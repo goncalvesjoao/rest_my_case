@@ -86,10 +86,12 @@ module RestMyCase
 
     def all_validations_green?(targets)
       targets.map do |object_to_validate|
+        extend_errors_if_necessary(object_to_validate)
+
         if Helpers.marked_for_destruction?(object_to_validate)
           true
         else
-          extend_errors_and_run_validations(object_to_validate)
+          run_validations(object_to_validate)
 
           object_to_validate.errors.empty?
         end
@@ -98,9 +100,7 @@ module RestMyCase
 
     private ########################### PRIVATE ################################
 
-    def extend_errors_and_run_validations(object_to_validate)
-      extend_errors_if_necessary object_to_validate
-
+    def run_validations(object_to_validate)
       self.class.validators.values.flatten.uniq.each do |validator|
         next if validator_condition_fails(validator, object_to_validate)
 

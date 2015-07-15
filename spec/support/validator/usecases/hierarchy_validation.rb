@@ -4,13 +4,19 @@ module HierarchyValidation
 
     target :post
 
-    validates_presence_of :title
+    validates_presence_of :title, if: ->(post) { !post.ignore_title }
 
   end
 
   class Son < Father
 
-    validates_presence_of :email
+    validates_presence_of :body
+
+  end
+
+  class GrandSon < Son
+
+    target :posts
 
   end
 
