@@ -79,7 +79,7 @@ module RestMyCase
     end
 
     def error(message = '')
-      abort && context.errors[self.class.name].push(message)
+      abort && context.errors.add(self.class.name, message)
     end
 
     def error!(message = '')

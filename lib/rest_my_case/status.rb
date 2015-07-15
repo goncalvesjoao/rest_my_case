@@ -4,14 +4,12 @@ module RestMyCase
 
     def self.trial_court
       @trial_court ||= Trial::Court.new \
-        Judge::Base, DefenseAttorney::Base, Base, Context::Status::Base
+        Judge::Base, DefenseAttorney::Base, Base, Context::Status
     end
 
     context_reader :status
 
     def failure(status, message = nil)
-      context.status.send("#{status}!")
-
       error(Helpers.blank?(message) ? "#{status}" : "#{status} - #{message}")
     end
 

@@ -1,7 +1,7 @@
 module RestMyCase
   module Context
 
-    class HttpStatus < Status::Base
+    class HttpStatus < Status
 
       RAILS_HTTP_STATUS = {
         continue: 100,
@@ -56,7 +56,7 @@ module RestMyCase
       }
 
       def http_status
-        RAILS_HTTP_STATUS[status.current.to_sym]
+        RAILS_HTTP_STATUS[status.to_sym]
       end
 
     end

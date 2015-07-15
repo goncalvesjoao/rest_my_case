@@ -7,12 +7,16 @@ module RestMyCase
 
       include ActiveModel::Serialization if defined?(ActiveModel)
 
+      def self.error_class
+        Errors::Base
+      end
+
       def to_hash
         Marshal.load Marshal.dump(attributes)
       end
 
       def errors
-        @errors ||= Hash.new { |hash, key| hash[key] = [] }
+        @errors ||= self.class.error_class.new(self)
       end
 
       def valid?
