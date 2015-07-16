@@ -59,6 +59,12 @@ module RestMyCase
         RAILS_HTTP_STATUS[status.to_sym]
       end
 
+      def error_message
+        {
+          message: errors.empty? ? 'unknown error' : errors.messages.join(', ')
+        }
+      end
+
     end
 
   end
