@@ -1,6 +1,10 @@
 module RestMyCase
   module AccusationAttorneys
 
+    # I DO NOT CLAIM OWNERSHIP OF THIS CODE, THIS CODE WAS TAKEN
+    # FROM "ActiveModel" GEM AND ADAPTED TO RUN WITHOUT "ActiveSupport"
+    # ORIGINAL SOURCE FILE: ActiveModel::Validations::LengthValidator
+
     class Length < Each
       MESSAGES  = { is: :wrong_length, minimum: :too_short, maximum: :too_long }.freeze
       CHECKS    = { is: :==, minimum: :>=, maximum: :<= }.freeze

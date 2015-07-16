@@ -1,6 +1,10 @@
 module RestMyCase
   module AccusationAttorneys
 
+    # I DO NOT CLAIM OWNERSHIP OF THIS CODE, THIS CODE WAS TAKEN
+    # FROM "ActiveModel" GEM AND ADAPTED TO RUN WITHOUT "ActiveSupport"
+    # ORIGINAL SOURCE FILE: ActiveModel::Validations::NumericalityValidator
+
     class Numericality < Each
       CHECKS = { :greater_than => :>, :greater_than_or_equal_to => :>=,
                  :equal_to => :==, :less_than => :<, :less_than_or_equal_to => :<=,
