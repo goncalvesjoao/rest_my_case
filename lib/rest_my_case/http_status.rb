@@ -1,10 +1,11 @@
 module RestMyCase
 
-  class HttpStatus < Status
+  module HttpStatus
 
-    def self.trial_court
-      @trial_court ||= Trial::Court.new \
-        Judge::Base, DefenseAttorney::Base, Base, Context::HttpStatus
+    def self.included(parent_class)
+      parent_class.include Status
+
+      parent_class.trial_court.context_class = Context::HttpStatus
     end
 
   end

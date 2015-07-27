@@ -107,8 +107,7 @@ describe RestMyCase::Base do
       end
 
       it "context should contain only one error" do
-        expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""]})
-        expect(@context.errors.full_messages).to eq ["Perform::ValidateName: "]
+        expect(@context.errors).to match a_hash_including({ message: '', class_name: "Perform::ValidateName" })
       end
 
       it "context prove that only the correct method have ran" do
@@ -130,8 +129,7 @@ describe RestMyCase::Base do
       end
 
       it "context should contain only one error" do
-        expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""]})
-        expect(@context.errors.full_messages).to eq ["Perform::ValidateName: "]
+        expect(@context.errors).to match a_hash_including({ message: '', class_name: "Perform::ValidateName" })
       end
 
       it "context prove that only the correct method have ran" do
@@ -232,8 +230,7 @@ describe RestMyCase::Base do
         end
 
         it "context should contain only 2 errors" do
-          expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""], "Perform::ValidateBody"=>[""]})
-          expect(@context.errors.full_messages).to eq ["Perform::ValidateName: ", "Perform::ValidateBody: "]
+          expect(@context.errors).to match a_hash_including({ message: '', class_name: "Perform::ValidateName"}, { message: '', class_name: "Perform::ValidateBody" })
         end
 
         it "context prove that only the correct method have ran" do
@@ -257,8 +254,7 @@ describe RestMyCase::Base do
         end
 
         it "context should contain only 2 errors" do
-          expect(@context.errors).to match a_hash_including({"Perform::ValidateName"=>[""], "Perform::ValidateBody"=>[""]})
-          expect(@context.errors.full_messages).to eq ["Perform::ValidateName: ", "Perform::ValidateBody: "]
+          expect(@context.errors).to match a_hash_including({ message: '', class_name: "Perform::ValidateName" }, { message: '', class_name: "Perform::ValidateBody" })
         end
 
         it "context prove that only the correct method have ran" do
@@ -293,8 +289,7 @@ describe RestMyCase::Base do
         end
 
         it "context should contain only 4 errors" do
-          expect(@context.errors).to match a_hash_including({"Perform::BuildPost"=>[""], "Perform::ValidateName"=>[""], "Perform::ValidateBody"=>[""], "Perform::SavePost"=>[""]})
-          expect(@context.errors.full_messages).to eq ["Perform::BuildPost: ", "Perform::ValidateName: ", "Perform::ValidateBody: ", "Perform::SavePost: "]
+          expect(@context.errors).to match a_hash_including({ message: '', class_name: "Perform::BuildPost" }, { message: '', class_name: "Perform::ValidateName" }, { message: '', class_name: "Perform::ValidateBody" }, { message: '', class_name: "Perform::SavePost" })
         end
 
         it "context prove that only the correct method have ran" do

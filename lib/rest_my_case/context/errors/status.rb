@@ -4,12 +4,14 @@ module RestMyCase
 
       class Status < Base
 
-        def add(error, message)
+        attr_reader :last_known_error
+
+        def add(error)
           super
 
-          status = message.to_s.split(' - ')[0]
+          @context.status.send("#{error[:status]}!")
 
-          @context.status.send("#{status}!")
+          @last_known_error = error
         end
 
       end

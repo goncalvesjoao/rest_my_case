@@ -59,10 +59,17 @@ module RestMyCase
         RAILS_HTTP_STATUS[status.to_sym]
       end
 
-      def error_message
-        {
-          message: errors.empty? ? 'unknown error' : errors.messages.join(', ')
-        }
+      def error_response
+
+        if errors.last_known_error
+          response = errors.last_known_error.dup
+          response.delete :class_name
+          response[:http_status] = http_status
+
+          response
+        else
+          { message: 'unkown error' }
+        end
       end
 
     end

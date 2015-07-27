@@ -9,6 +9,10 @@ module RestMyCase
         Judge::Base, DefenseAttorney::Base, RestMyCase::Base, Context::Base
     end
 
+    def self.trial_court=(new_trial_court)
+      @trial_court = new_trial_court
+    end
+
     def self.depends(*use_case_classes)
       dependencies.push(*use_case_classes)
     end
@@ -78,12 +82,16 @@ module RestMyCase
       abort && fail(Errors::Abort)
     end
 
-    def error(message = '')
-      abort && context.errors.add(self.class.name, message)
+    def error(error_data = '')
+      error_data = { message: error_data } unless error_data.is_a?(Hash)
+
+      error_data[:class_name] = self.class.name
+
+      abort && context.errors.add(error_data)
     end
 
-    def error!(message = '')
-      error(message) && fail(Errors::Abort)
+    def error!(error_data = '')
+      error(error_data) && fail(Errors::Abort)
     end
 
     def skip

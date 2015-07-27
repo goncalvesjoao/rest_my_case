@@ -12,7 +12,7 @@ describe RestMyCase::Validator do
     end
 
     it "@context.errors should reflect the fact that no target is defined" do
-      expect(@context.errors).to a_hash_including({"RestMyCase::Validator"=>["no target to validate!"]})
+      expect(@context.errors).to a_hash_including({ message: "no target to validate!", class_name: "RestMyCase::Validator" })
     end
   end
 
@@ -28,7 +28,7 @@ describe RestMyCase::Validator do
       end
 
       it "@context.errors should include the unprocessable_entity error" do
-        expect(@context.errors).to a_hash_including({"CustomValidator"=>["unprocessable_entity"]})
+        expect(@context.errors).to a_hash_including({ message: "unprocessable_entity" , class_name: "CustomValidator" })
       end
 
       it "@post.errors should mention the bad phone_number error" do

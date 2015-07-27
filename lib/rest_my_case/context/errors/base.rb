@@ -2,7 +2,7 @@ module RestMyCase
   module Context
     module Errors
 
-      class Base < Hash
+      class Base < Array
 
         def initialize(context)
           super()
@@ -10,20 +10,8 @@ module RestMyCase
           @context = context
         end
 
-        def add(class_name, message)
-          self[class_name] ||= []
-
-          self[class_name].push(message.to_s)
-        end
-
-        def messages
-          self.values.flatten
-        end
-
-        def full_messages
-          self.map do |class_name, messages|
-            "#{class_name}: #{messages.join(', ')}"
-          end
+        def add(error)
+          self.push(error)
         end
 
       end
