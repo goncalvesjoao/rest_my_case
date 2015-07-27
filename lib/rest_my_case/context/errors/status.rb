@@ -14,6 +14,8 @@ module RestMyCase
             error[:message] = nil
           end
 
+          error[:status] = error[:status].to_s
+
           @context.status.send("#{error[:status]}!")
 
           @last_known_error = error

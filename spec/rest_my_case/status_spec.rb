@@ -47,7 +47,7 @@ describe RestMyCase::Status do
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ status: :unprocessable_entity, message: nil, class_name: "StatusTestCase2" })]
+        expect(@context.errors).to match [a_hash_including({ status: 'unprocessable_entity', message: nil, class_name: "StatusTestCase2" })]
       end
     end
 
@@ -75,7 +75,7 @@ describe RestMyCase::Status do
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ status: :internal_server_error, message: nil, class_name: "StatusTestCase3" })]
+        expect(@context.errors).to match [a_hash_including({ status: 'internal_server_error', message: nil, class_name: "StatusTestCase3" })]
       end
     end
 
@@ -103,7 +103,7 @@ describe RestMyCase::Status do
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ status: :internal_server_error, message: 'something bad', class_name: "StatusTestCase4", yada: true })]
+        expect(@context.errors).to match [a_hash_including({ status: 'internal_server_error', message: 'something bad', class_name: "StatusTestCase4", yada: true })]
       end
     end
 
@@ -131,7 +131,7 @@ describe RestMyCase::Status do
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ status: :unprocessable_entity, message: 'invalid id', class_name: "StatusTestCase5" })]
+        expect(@context.errors).to match [a_hash_including({ status: 'unprocessable_entity', message: 'invalid id', class_name: "StatusTestCase5" })]
       end
     end
 
@@ -159,7 +159,7 @@ describe RestMyCase::Status do
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ status: :internal_server_error, message: 'while saving the resource', class_name: "StatusTestCase6" })]
+        expect(@context.errors).to match [a_hash_including({ status: 'internal_server_error', message: 'while saving the resource', class_name: "StatusTestCase6" })]
       end
     end
 

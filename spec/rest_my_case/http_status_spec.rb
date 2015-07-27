@@ -32,7 +32,7 @@ describe RestMyCase::HttpStatus do
     end
 
     it "@context.error_response should only list the class's dependencies" do
-      expect(@context.error_response).to match a_hash_including({ status: :unprocessable_entity, http_status: 422, message: nil })
+      expect(@context.error_response).to match a_hash_including({ status: 'unprocessable_entity', http_status: 422, message: nil })
     end
   end
 
@@ -49,7 +49,7 @@ describe RestMyCase::HttpStatus do
     end
 
     it "@context.error_response should only list the class's dependencies" do
-      expect(@context.error_response).to match a_hash_including({ status: :service_unavailable, http_status: 503, code: 404, message: "github could not found repo" })
+      expect(@context.error_response).to match a_hash_including({ status: 'service_unavailable', http_status: 503, code: 404, message: "github could not found repo" })
     end
   end
 
