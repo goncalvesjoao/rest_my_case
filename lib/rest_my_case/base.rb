@@ -9,10 +9,6 @@ module RestMyCase
         Judge::Base, DefenseAttorney::Base, RestMyCase::Base, Context::Base
     end
 
-    def self.trial_court=(new_trial_court)
-      @trial_court = new_trial_court
-    end
-
     def self.depends(*use_case_classes)
       dependencies.push(*use_case_classes)
     end
