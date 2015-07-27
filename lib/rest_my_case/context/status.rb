@@ -10,7 +10,7 @@ module RestMyCase
           method_name = method[0...-1]
 
           if last_char == '!'
-            self.replace(method_name)
+            replace(method_name)
           elsif last_char == '?'
             self == method_name
           else
@@ -28,8 +28,8 @@ module RestMyCase
         @status ||= StatusString.new 'ok'
       end
 
-      def status=(val)
-        raise 'status is a reserved keyword which cannot be set'
+      def status=(_)
+        fail 'status is a reserved keyword which cannot be set'
       end
 
     end

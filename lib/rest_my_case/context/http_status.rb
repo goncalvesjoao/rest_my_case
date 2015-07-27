@@ -76,6 +76,3 @@ module RestMyCase
 
   end
 end
-
-
-

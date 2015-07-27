@@ -11,7 +11,7 @@ module RestMyCase
         end
 
         def add(error)
-          self.push(error)
+          push(error)
         end
 
       end
