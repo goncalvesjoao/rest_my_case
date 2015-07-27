@@ -3,6 +3,8 @@ module RestMyCase
   module Status
 
     def self.included(parent_class)
+      return unless parent_class.respond_to? :trial_court
+
       parent_class.trial_court.context_class = Context::Status
     end
 
