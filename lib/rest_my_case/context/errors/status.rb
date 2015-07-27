@@ -9,6 +9,11 @@ module RestMyCase
         def add(error)
           super
 
+          if error[:status].nil? && error[:message]
+            error[:status]  = error[:message]
+            error[:message] = nil
+          end
+
           @context.status.send("#{error[:status]}!")
 
           @last_known_error = error

@@ -34,20 +34,20 @@ describe RestMyCase::Status do
 
       before { @context = StatusTestCase2.perform }
 
-      it "@context.status.unprocessable_entity? should be false" do
-        expect(@context.status.unprocessable_entity?).to be false
+      it "@context.status.unprocessable_entity? should be true" do
+        expect(@context.status.unprocessable_entity?).to be true
       end
 
       it "@context.next_line should be true" do
         expect(@context.next_line).to be true
       end
 
-      it "@context.status.ok? should be true" do
-        expect(@context.status.ok?).to be true
+      it "@context.status.ok? should be false" do
+        expect(@context.status.ok?).to be false
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ message: :unprocessable_entity, class_name: "StatusTestCase2" })]
+        expect(@context.errors).to match [a_hash_including({ status: :unprocessable_entity, message: nil, class_name: "StatusTestCase2" })]
       end
     end
 
@@ -62,20 +62,20 @@ describe RestMyCase::Status do
 
       before { @context = StatusTestCase3.perform }
 
-      it "@context.status.internal_server_error? should be false" do
-        expect(@context.status.internal_server_error?).to be false
+      it "@context.status.internal_server_error? should be true" do
+        expect(@context.status.internal_server_error?).to be true
       end
 
       it "@context.next_line should raise an error" do
         expect { context.next_line }.to raise_error
       end
 
-      it "@context.status.ok? should be true" do
-        expect(@context.status.ok?).to be true
+      it "@context.status.ok? should be false" do
+        expect(@context.status.ok?).to be false
       end
 
       it "context's errors should have a proper message" do
-        expect(@context.errors).to match [a_hash_including({ message: :internal_server_error, class_name: "StatusTestCase3" })]
+        expect(@context.errors).to match [a_hash_including({ status: :internal_server_error, message: nil, class_name: "StatusTestCase3" })]
       end
     end
 
