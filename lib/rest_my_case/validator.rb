@@ -11,12 +11,13 @@ module RestMyCase
           Judge::Base, DefenseAttorney::Base, Validator, Context::Base
       end
 
-      def target_name
-        @target_name || Helpers.super_method(self, :target_name)
+      def target_options
+        @target_options || Helpers.super_method(self, :target_options)
       end
 
-      def target(target_name)
-        @target_name = target_name
+      def target(target_name, target_options = {})
+        @target_options = target_options || {}
+        @target_options[:name] = target_name
       end
 
       def validators
@@ -62,25 +63,44 @@ module RestMyCase
 
     extend AccusationAttorneys::HelperMethods
 
-    def target_name
-      self.class.target_name
+    def target_options
+      self.class.target_options || {}
+    end
+
+    def parent_target
+      @parent_target ||=
+        target_options[:in] ? get_target(target_options[:in]) : nil
     end
 
     def target
-      return nil if target_name.nil?
+      return nil if target_options[:name].nil?
 
-      respond_to?(target_name) ? send(target_name) : context.send(target_name)
+      if parent_target
+        extend_errors_if_necessary(parent_target)
+
+        parent_target.send(target_options[:name])
+      else
+        get_target(target_options[:name])
+      end
     end
 
     def perform
       targets = [*target]
 
-      return if Helpers.blank?(targets)
+      return if Helpers.blank?(targets) || all_validations_green?(targets)
 
-      error('unprocessable_entity') unless all_validations_green? targets
+      if parent_target
+        parent_target.errors.add(target_options[:name], :invalid)
+      end
+
+      error('unprocessable_entity')
     end
 
     protected ######################## PROTECTED ###############################
+
+    def get_target(method)
+      respond_to?(method) ? send(method) : context.send(method)
+    end
 
     def all_validations_green?(targets)
       targets.map do |object_to_validate|

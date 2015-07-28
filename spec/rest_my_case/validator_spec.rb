@@ -102,11 +102,11 @@ describe RestMyCase::Validator do
         expect(@context.ok?).to be true
       end
 
-      it "@post1 should not cotain errors" do
+      it "@post1 should not contain errors" do
         expect(@post1.errors.count).to be 0
       end
 
-      it "@post2 should not cotain errors" do
+      it "@post2 should not contain errors" do
         expect(@post2.errors.count).to be 0
       end
     end
@@ -122,11 +122,11 @@ describe RestMyCase::Validator do
         expect(@context.ok?).to be false
       end
 
-      it "@post1 should not cotain errors" do
+      it "@post1 should not contain errors" do
         expect(@post1.errors.count).to be 0
       end
 
-      it "@post2 should not cotain errors" do
+      it "@post2 should not contain errors" do
         expect(@post2.errors.count).to be 1
         expect(@post2.errors.added?(:body, :blank)).to be true
       end
@@ -143,12 +143,12 @@ describe RestMyCase::Validator do
         expect(@context.ok?).to be false
       end
 
-      it "@post1 should not cotain errors" do
+      it "@post1 should not contain errors" do
         expect(@post1.errors.count).to be 1
         expect(@post1.errors.added?(:title, :blank)).to be true
       end
 
-      it "@post2 should not cotain errors" do
+      it "@post2 should not contain errors" do
         expect(@post2.errors.count).to be 1
         expect(@post2.errors.keys).to eq [:body]
       end
@@ -165,11 +165,11 @@ describe RestMyCase::Validator do
         expect(@context.ok?).to be false
       end
 
-      it "@post1 should not cotain errors" do
+      it "@post1 should not contain errors" do
         expect(@post1.errors.count).to be 0
       end
 
-      it "@post2 should not cotain errors" do
+      it "@post2 should not contain errors" do
         expect(@post2.errors.count).to be 1
         expect(@post2.errors.include?(:body)).to be true
       end
@@ -186,11 +186,11 @@ describe RestMyCase::Validator do
         expect(@context.ok?).to be true
       end
 
-      it "@post1 should not cotain errors" do
+      it "@post1 should not contain errors" do
         expect(@post1.errors.count).to be 0
       end
 
-      it "@post2 should not cotain errors" do
+      it "@post2 should not contain errors" do
         expect(@post2.errors.count).to be 0
       end
     end
@@ -206,15 +206,74 @@ describe RestMyCase::Validator do
         expect(@context.ok?).to be true
       end
 
-      it "@post1 should not cotain errors" do
+      it "@post1 should not contain errors" do
         expect(@post1.errors.count).to be 0
       end
 
-      it "@post2 should not cotain errors" do
+      it "@post2 should not contain errors" do
         expect(@post2.errors.count).to be 0
       end
     end
 
   end
+
+  context "When passing an object with nested objects" do
+
+    context "and both of the nested object are valid" do
+      before do
+        @post_with_comments = RubyPostWithComments.new([
+          { title: 'first comment' },
+          { title: 'second comment' }
+        ])
+
+        @context = NestedValidation.perform(post: @post_with_comments)
+      end
+
+      it "@context.ok? should be true" do
+        expect(@context.ok?).to be true
+      end
+
+      it "@post_with_comments should not contain errors" do
+        expect(@post_with_comments.errors.count).to be 0
+      end
+
+      it "@post_with_comments.comments should not contain errors" do
+        @post_with_comments.comments.each do |comment|
+          expect(comment.errors.count).to be 0
+        end
+      end
+    end
+
+    context "and one of them is invalid" do
+      before do
+        @post_with_comments = RubyPostWithComments.new([
+          { title: 'first comment' },
+          {}
+        ])
+
+        @context = NestedValidation.perform(post: @post_with_comments)
+      end
+
+      it "@context.ok? should be false" do
+        expect(@context.ok?).to be false
+      end
+
+      it "@post_with_comments should contain one error" do
+        expect(@post_with_comments.errors.count).to be 1
+        expect(@post_with_comments.errors.added?(:comments, :invalid)).to be true
+      end
+
+      it "@post_with_comments.comments[0] should not contain errors" do
+        expect(@post_with_comments.comments[0].errors.count).to be 0
+      end
+
+      it "@post_with_comments.comments[1] should contain one error" do
+        expect(@post_with_comments.comments[1].errors.count).to be 1
+        expect(@post_with_comments.comments[1].errors.added?(:title, :blank)).to be true
+      end
+    end
+
+  end
+
 end
 
