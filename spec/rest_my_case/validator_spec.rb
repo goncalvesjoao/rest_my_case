@@ -7,12 +7,12 @@ describe RestMyCase::Validator do
       @context = RestMyCase::Validator.perform
     end
 
-    it "@context.ok? should be false" do
-      expect(@context.ok?).to be false
+    it "@context.ok? should be true" do
+      expect(@context.ok?).to be true
     end
 
-    it "@context.errors should reflect the fact that no target is defined" do
-      expect(@context.errors).to a_hash_including({ message: "no target to validate!", class_name: "RestMyCase::Validator" })
+    it "@context.errors should be empty" do
+      expect(@context.errors.empty?).to be true
     end
   end
 

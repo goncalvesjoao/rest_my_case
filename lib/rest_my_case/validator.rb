@@ -75,11 +75,9 @@ module RestMyCase
     def perform
       targets = [*target]
 
-      if targets.empty?
-        error('no target to validate!')
-      else
-        error('unprocessable_entity') unless all_validations_green? targets
-      end
+      return if Helpers.blank?(targets)
+
+      error('unprocessable_entity') unless all_validations_green? targets
     end
 
     protected ######################## PROTECTED ###############################
