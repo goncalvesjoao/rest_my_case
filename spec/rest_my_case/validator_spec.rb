@@ -226,7 +226,7 @@ describe RestMyCase::Validator do
           { title: 'second comment' }
         ])
 
-        @context = NestedValidation.perform(post: @post_with_comments)
+        @context = NestedValidation::Base.perform(post: @post_with_comments)
       end
 
       it "@context.ok? should be true" do
@@ -251,7 +251,7 @@ describe RestMyCase::Validator do
           {}
         ])
 
-        @context = NestedValidation.perform(post: @post_with_comments)
+        @context = NestedValidation::Base.perform(post: @post_with_comments)
       end
 
       it "@context.ok? should be false" do
@@ -270,6 +270,61 @@ describe RestMyCase::Validator do
       it "@post_with_comments.comments[1] should contain one error" do
         expect(@post_with_comments.comments[1].errors.count).to be 1
         expect(@post_with_comments.comments[1].errors.added?(:title, :blank)).to be true
+      end
+    end
+
+    context "Validator has a method with the same name has the target" do
+      before do
+        @post_with_comments = RubyPostWithComments.new([
+          { title: 'first comment' },
+          {}
+        ])
+
+        @context = NestedValidation::ValidatorSameMethod.perform(post: @post_with_comments)
+      end
+
+      it "@context.ok? should be true" do
+        expect(@context.ok?).to be true
+      end
+
+      it "@post_with_comments should not contain errors" do
+        expect(@post_with_comments.errors.count).to be 0
+      end
+
+      it "@context._comments should not contain errors" do
+        @context._comments.each do |comment|
+          expect(comment.errors.count).to be 0
+        end
+      end
+    end
+
+    context "Context has a method with the same name has the target" do
+      before do
+        @post_with_comments = RubyPostWithComments.new([
+          { title: 'first comment' },
+          {}
+        ])
+
+        @context = NestedValidation::Base.perform(
+          post: @post_with_comments,
+          comments: [
+            RubyPostWithComments::RubyComment.new({ title: 'first comment' }),
+            RubyPostWithComments::RubyComment.new({ title: 'second comment' })
+          ])
+      end
+
+      it "@context.ok? should be true" do
+        expect(@context.ok?).to be true
+      end
+
+      it "@post_with_comments should not contain errors" do
+        expect(@post_with_comments.errors.count).to be 0
+      end
+
+      it "@context.comments should not contain errors" do
+        @context.comments.each do |comment|
+          expect(comment.errors.count).to be 0
+        end
       end
     end
 

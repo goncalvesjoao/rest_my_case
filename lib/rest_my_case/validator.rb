@@ -75,13 +75,15 @@ module RestMyCase
     def target
       return nil if target_options[:name].nil?
 
+      target_content = get_target(target_options[:name])
+
       if parent_target
         extend_errors_if_necessary(parent_target)
 
-        parent_target.send(target_options[:name])
-      else
-        get_target(target_options[:name])
+        target_content ||= parent_target.send(target_options[:name])
       end
+
+      target_content
     end
 
     def perform
