@@ -60,7 +60,6 @@ module RestMyCase
       end
 
       def error_response
-
         if errors.last_known_error
           response = errors.last_known_error.dup
           response.delete :class_name

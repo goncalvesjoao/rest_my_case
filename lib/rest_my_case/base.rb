@@ -66,7 +66,7 @@ module RestMyCase
 
     def invoke!(*use_case_classes)
       trial_court.execute(use_case_classes, context).tap do |trial_case|
-        abort if trial_case.aborted
+        abort! if trial_case.aborted
       end.context
     end
 

@@ -311,6 +311,8 @@ describe RestMyCase::Base do
       def perform
         super
         invoke Perform::BuildPost, Perform::Validations, Perform::SavePost
+
+        context.should_be_true = true
       end
     end
 
@@ -321,6 +323,8 @@ describe RestMyCase::Base do
       expect(context.perform.length).to be 2
       expect(context.rollback.length).to be 0
       expect(context.final.length).to be 2
+
+      expect(context.should_be_true).to be true
     end
 
   end
@@ -393,6 +397,8 @@ describe RestMyCase::Base do
           super
 
           invoke! Perform::ValidateName, Perform::ValidateBody
+
+          context.should_not_be_true = true
         end
       end
 
@@ -450,6 +456,8 @@ describe RestMyCase::Base do
           "Perform::Logger",
           "Perform::CreatePost2"
         ]
+
+        expect(@context.should_not_be_true).to be_falsey
       end
 
     end
