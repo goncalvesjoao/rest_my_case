@@ -71,7 +71,6 @@ Checkout this step by step tutorial: (WIP) on how to isolate your code into a ru
 
 ## 3) Basic usage
 
-## 3.1) Context
 ```ruby
 class BuildPost < RestMyCase::Base
   def perform
@@ -80,19 +79,23 @@ class BuildPost < RestMyCase::Base
   end
 end
 ```
-- The Hash passed down to **BuildPost.perform** will be available through an instance method called **#context** that will return an OpenStruct object initialized with that Hash (see more in section 7).
 
 ```
 irb> params = { id: 1, post: { title: 'my first post' } }
-irb> BuildPost.perform id: params[:id], post_attributes: params[:post]
+irb> context = BuildPost.perform id: params[:id], post_attributes: params[:post]
 1
 {:title=>"my first post"}
+irb> context.id
+1
 ```
 
-## 3.2) Class method **.perform(params = {})**
-Will instantiate your use case and all of its **dependencies** (see more in section 4.2), pass down the **params** Hash to a **context** object (see more in section 7) and run the **waiting to be implemented methods** (see more in section 4.1) of your use case (and dependencies) with that context.
+The Hash passed down to **BuildPost.perform** will be available through an instance method called **#context** that will return an OpenStruct object initialized with that Hash (see more in section 7).
 
-## 3.3) Dependencies share the same context
+Executing **BuildPost.perform** will instantiate your use case and all of its **dependencies**, build a **context** with the contents of **params**, run your use case (and its dependencies) with that context and return it at the end.
+
+## 1.1) Normal usage
+Organize your use cases by single responsibilities and establish your use case flow through "dependencies".
+
 ```ruby
 class FindPost < RestMyCase::Base
   def perform
