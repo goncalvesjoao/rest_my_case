@@ -151,7 +151,7 @@ irb> UseCase1.perform #will print
 "UseCase1#final"
 ```
 
-Method **#rollback** will be called after each **#perform** in the reverse order if **#error** is invoked inside a **#setup** of **#perform** (see more in section 5).
+Method **#rollback** will be called after **#perform** and before **#final** if **#error** is invoked inside a **#setup** of **#perform** (see more in section 5).
 ```
 irb> UseCase1.perform(should_fail: true) #will print
 "UseCase1#setup"
