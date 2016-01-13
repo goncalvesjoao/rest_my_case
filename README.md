@@ -292,12 +292,18 @@ UseCase2#final -> UseCase3#final -> UseCase1#final
 ---
 
 ## 9) RestMyCase::Validator class
-- This class is going to suffer some massive changes as I'm thinking delegating all of the validation responsibilities to [compel](https://github.com/joaquimadraz/compel) gem.
+This class is going to suffer some massive changes, since I'm considering delegating all validation responsibilities to [compel](https://github.com/joaquimadraz/compel) gem.
 
 ---
 
 ## 10) RestMyCase::Status module
-Implements following methods:
+```ruby
+class UseCase1 < RestMyCase::Base
+  include RestMyCase::Status
+end
+```
+
+Adds following methods:
 
 Methods | Behaviour
 ------- | ---------
@@ -313,6 +319,12 @@ WIP
 ---
 
 ## 11) RestMyCase::HttpStatus module (for seamless API integration)
+```ruby
+class UseCase1 < RestMyCase::Base
+  include RestMyCase::HttpStatus
+end
+```
+
 Includes the module **RestMyCase::Status** and **#context** becomes an instance of **RestMyCase::Context::HttpStatus**.
 
 ### 11.1) RestMyCase::Context::HttpStatus
