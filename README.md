@@ -93,7 +93,7 @@ The Hash passed down to **BuildPost.perform** will be available through an insta
 
 Executing **BuildPost.perform** will instantiate your use case and all of its **dependencies**, build a **context** with the contents of **params**, run your use case (and its dependencies) with that context and return it at the end.
 
-## 1.1) Normal usage
+## 3.1) Normal usage
 Organize your use cases by single responsibilities and establish your use case flow through "dependencies".
 
 ```ruby
