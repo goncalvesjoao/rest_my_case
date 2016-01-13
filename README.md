@@ -236,7 +236,7 @@ Methods | Behaviour
 **.context_reader(*methods)** | Defines getter methods that return **context.send method**, to help reduce the **context.method** boilerplate.
 **.context_writer(*methods)** | Defines setter methods that set **context.send "#{method}=", value**, to help reduce the **context.method = value** boilerplate.
 **.context_accessor(*methods)** | Calls both **.context_reader** and **.context_writer** methods.
-**.silence_dependencies_abort=** | If **false** once a dependency calls **#abort(!)** the next in line dependencies will not be called (and **#rollback** will be called in reverse order) but if **true** all dependencies will run no matter how many times **#abort(!)** was called (usefull when you want to run multiple validations, (see more in section 9).
+**.silence_dependencies_abort=** | If **false** once a dependency calls **#abort(!)** the next in line dependencies will not be called (and **#rollback** will be called in reverse order) but if **true** all dependencies will run no matter how many times **#abort(!)** was called (usefull when you want to run multiple validations (see more in section 9).
 
 ---
 
@@ -250,7 +250,7 @@ Methods | Behaviour
 **#valid?** | Checks if **#errors** is empty
 **#ok?** | Alias to **#valid?**
 **#success?** | Alias to **#ok?**
-**#errors** | Array that gets 'pushed' with **{ message: error_message, class_name: <UseCaseClass> }** (or **error_message** itself if **error_message** already a Hash) every time **<UseCaseClass>#error(error_message)** is called.
+**#errors** | Array that gets 'pushed' with **{ message: error_message, class_name: UseCase.class.name }** (or **error_message** itself if **error_message** already a Hash) every time **UseCase#error(error_message)** is called.
 
 If **defined?(ActiveModel)** is true, **ActiveModel::Serialization** will be included and in turn methods like **#to_json(options = {})** and **#serializable_hash(options = nil)** will become available.
 
@@ -258,9 +258,10 @@ If **defined?(ActiveModel)** is true, **ActiveModel::Serialization** will be inc
 
 ### 8) Examples
 If **UseCase1** depends on **UseCase2** and **UseCase3** in that respective order.
+
 Running **UseCase1.perform** will pass down the context to each use case in the following manner:
 
-#### 8.1) Given that no use case called the method **#error**
+#### 8.1) Given that no use case called the method(s) **#error(!)**
 ```
 UseCase2#setup -> UseCase3#setup -> UseCase1#setup ->
 UseCase2#perform -> UseCase3#perform -> UseCase1#perform ->
