@@ -113,7 +113,7 @@ class BuildPost < RestMyCase::Base
   end
 end
 ```
-The class method **.depends** will make **BuildPost** dependent of **FindPost** which means that calling **BuildPost.perform** will run **FindPost.perform** first and **BuildPost.perform** last. Both use cases will share the same context.
+The class method **.depends** will make **BuildPost** dependent of **FindPost** which means that calling **BuildPost.perform** will run **FindPost#perform** first and **BuildPost#perform** last. Both use cases will share the same context.
 
 ```
 irb> params = { id: 1, post: { title: 'my first post' } }
