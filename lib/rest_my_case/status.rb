@@ -17,12 +17,16 @@ module RestMyCase
       context.status
     end
 
-    def failure(status, error = nil)
-      error = { message: error } unless error.is_a?(Hash)
+    def failure(status, error_message = nil)
+      if error_message.is_a?(Hash)
+        error_data = error_message
+      else
+        error_data = { message: error_message }
+      end
 
-      error[:status] = status
+      error_data[:status] = status
 
-      error(error)
+      error(error_data)
     end
 
     def failure!(status, error = nil)

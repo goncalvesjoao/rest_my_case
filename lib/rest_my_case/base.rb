@@ -52,9 +52,9 @@ module RestMyCase
       @dependent_use_case = dependent_use_case
     end
 
-    def setup;  end
+    def setup; end
 
-    def perform;  end
+    def perform; end
 
     def rollback; end
 
@@ -78,8 +78,12 @@ module RestMyCase
       abort && fail(Errors::Abort)
     end
 
-    def error(error_data = '')
-      error_data = { message: error_data } unless error_data.is_a?(Hash)
+    def error(error_message = '')
+      if error_message.is_a?(Hash)
+        error_data = error_message
+      else
+        error_data = { message: error_message }
+      end
 
       error_data[:class_name] = self.class.name
 
