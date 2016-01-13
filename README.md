@@ -108,8 +108,6 @@ class BuildPost < RestMyCase::Base
 
   def perform
     context.post.assign_attributes context.post_attributes
-
-    puts post.name
   end
 end
 ```
@@ -117,7 +115,8 @@ The class method **.depends** will make **BuildPost** dependent of **FindPost** 
 
 ```
 irb> params = { id: 1, post: { title: 'my first post' } }
-irb> BuildPost.perform id: params[:id], post_attributes: params[:post]
+irb> context = BuildPost.perform id: params[:id], post_attributes: params[:post]
+irb> context.post.name
 "my first post"
 ```
 
