@@ -64,7 +64,7 @@ describe RestMyCase::AccusationAttorneys::Format do
 
   describe "without options" do
     it 'should raise an error' do
-      expect { Class.new(RestMyCase::Validator) { validates_format_of :body } }.to raise_error
+      expect { Class.new(RestMyCase::Validator) { validates_format_of :body } }.to raise_error ArgumentError
     end
   end
 

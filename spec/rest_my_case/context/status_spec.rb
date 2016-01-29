@@ -8,7 +8,7 @@ describe RestMyCase::Context::Status do
     it 'raises error' do
       expect do
         context.status = 'not_found'
-      end.to raise_error
+      end.to raise_error('status is a reserved keyword which cannot be set')
     end
   end
 
@@ -18,7 +18,7 @@ describe RestMyCase::Context::Status do
     describe '#method_missing' do
       context "given that no method was previously called" do
         it 'calling an unknown_method should raise an error' do
-          expect { @status.unknown_method }.to raise_error
+          expect { @status.unknown_method }.to raise_error NoMethodError
         end
 
         it '#ok? should be true' do
