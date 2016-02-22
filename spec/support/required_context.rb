@@ -1,12 +1,6 @@
 module RequiredContext
 
   module Users
-    class Create < RestMyCase::Base
-      required_context \
-        admin: Compel.boolean,
-        user_attributes: Compel.any
-    end
-
     class GetCurrentUser < RestMyCase::Base
       required_context [
         :current_user
@@ -18,12 +12,6 @@ module RequiredContext
   end
 
   module Posts
-    class Create < RestMyCase::Base
-      required_context \
-        post_attributes: Compel.any,
-        current_user: Compel.any.required
-    end
-
     class FindOne < RestMyCase::Base
       required_context [
         :id
