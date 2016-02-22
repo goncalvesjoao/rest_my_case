@@ -12,10 +12,10 @@ module RestMyCase
                   :defendant_class
 
       def initialize(last_ancestor, context_class, use_case_classes, attributes)
-        @context         = build_context attributes, context_class
-        @last_ancestor   = last_ancestor
+        @context = build_context attributes, context_class
+        @last_ancestor = last_ancestor
         @defendant_class = build_defendant(last_ancestor, use_case_classes)
-        @defendant       = @defendant_class.new @context
+        @defendant = @defendant_class.new @context
       end
 
       def aborted

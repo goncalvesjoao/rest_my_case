@@ -1,3 +1,5 @@
+require 'rest_my_case/context/errors/status'
+
 module RestMyCase
   module Context
 

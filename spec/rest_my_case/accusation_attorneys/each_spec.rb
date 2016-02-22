@@ -9,7 +9,7 @@ describe RestMyCase::AccusationAttorneys::Each do
       before { @instance = AccusationAttorneysTestCase2.new({ attributes: { id: '1' } }) }
 
       it 'should raise an error' do
-        expect { @instance.validate_each(nil, nil, nil) }.to raise_error
+        expect { @instance.validate_each(nil, nil, nil) }.to raise_error NotImplementedError
       end
     end
   end

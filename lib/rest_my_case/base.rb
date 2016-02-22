@@ -9,6 +9,18 @@ module RestMyCase
         Judge::Base, DefenseAttorney::Base, RestMyCase::Base, Context::Base
     end
 
+    def self.required_context(*schema)
+      if schema.length == 1 && (schema[0].is_a?(Hash) || schema[0].is_a?(Array))
+        @required_context_schema = schema[0]
+      else
+        @required_context_schema = schema
+      end
+    end
+
+    def self.required_context_schema
+      @required_context_schema ||= {}
+    end
+
     def self.depends(*use_case_classes)
       dependencies.push(*use_case_classes)
     end
@@ -44,12 +56,16 @@ module RestMyCase
 
     ######################## INSTANCE METHODS BELLOW ###########################
 
-    attr_reader :context, :dependent_use_case, :options
+    attr_reader :context, :options
 
     def initialize(context, dependent_use_case = nil)
-      @options            = {}
-      @context            = context
-      @dependent_use_case = dependent_use_case
+      @context = context
+      @options = { dependent_use_case: dependent_use_case }
+
+      return unless dependent_use_case
+
+      @options[:silent_abort] = RestMyCase.get_config \
+        :silence_dependencies_abort, dependent_use_case.class
     end
 
     def setup; end
@@ -61,17 +77,23 @@ module RestMyCase
     def final; end
 
     def invoke(*use_case_classes)
-      trial_court.execute(use_case_classes, context.to_hash).context
+      self.class.trial_court.execute(use_case_classes, context.to_hash).context
     end
 
     def invoke!(*use_case_classes)
-      trial_court.execute(use_case_classes, context).tap do |trial_case|
-        abort! if trial_case.aborted
-      end.context
+      trial_case = self.class.trial_court.execute(use_case_classes, context)
+
+      abort! if trial_case.aborted
+
+      trial_case.context
     end
 
     def abort
-      silent_abort? ? dependent_use_case.abort : (options[:should_abort] = true)
+      if options[:silent_abort]
+        options[:dependent_use_case].abort
+      else
+        options[:should_abort] = true
+      end
     end
 
     def abort!
@@ -102,17 +124,16 @@ module RestMyCase
       skip && fail(Errors::Skip)
     end
 
-    protected ######################## PROTECTED ###############################
+    def validate_context(schema = self.class.required_context_schema)
+      errors = context.validate_schema(schema)
 
-    def trial_court
-      self.class.trial_court
+      error(context_errors: errors, message: 'invalid context') if errors
+
+      Helpers.blank? errors
     end
 
-    def silent_abort?
-      return false if dependent_use_case.nil?
-
-      RestMyCase.get_config \
-        :silence_dependencies_abort, dependent_use_case.class
+    def validate_context!(schema = self.class.required_context)
+      validate_context(schema) && fail(Errors::Abort)
     end
 
   end

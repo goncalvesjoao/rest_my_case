@@ -66,8 +66,8 @@ describe RestMyCase::Status do
         expect(@context.status.internal_server_error?).to be true
       end
 
-      it "@context.next_line should raise an error" do
-        expect { context.next_line }.to raise_error
+      it "@context.next_line should be nil" do
+        expect(@context.next_line).to be nil
       end
 
       it "@context.status.ok? should be false" do
@@ -94,8 +94,8 @@ describe RestMyCase::Status do
         expect(@context.status.internal_server_error?).to be true
       end
 
-      it "@context.next_line should raise an error" do
-        expect { context.next_line }.to raise_error
+      it "@context.next_line should be nil" do
+        expect(@context.next_line).to be nil
       end
 
       it "@context.status.ok? should be false" do
@@ -150,8 +150,8 @@ describe RestMyCase::Status do
         expect(@context.status.internal_server_error?).to be true
       end
 
-      it "@context.next_line should be true" do
-        expect { context.next_line }.to raise_error
+      it "@context.next_line should be nil" do
+        expect(@context.next_line).to be nil
       end
 
       it "@context.status.ok? should be false" do

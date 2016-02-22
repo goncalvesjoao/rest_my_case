@@ -232,6 +232,7 @@ irb> UseCase1.perform #will print only
 Methods | Behaviour
 ------- | ---------
 **.depends(*use_case_classes)** | Adds the **use_case_classes** array to the use case's **dependencies** list, that will be executed by order before the actual use case (see more in section 4).
+**.required_context(*attributes)** | WIP.
 **.context_reader(*methods)** | Defines getter methods that return **context.send method**, to help reduce the **context.method** boilerplate.
 **.context_writer(*methods)** | Defines setter methods that set **context.send "#{method}=", value**, to help reduce the **context.method = value** boilerplate.
 **.context_accessor(*methods)** | Calls both **.context_reader** and **.context_writer** methods.
@@ -292,7 +293,7 @@ UseCase2#final -> UseCase3#final -> UseCase1#final
 ---
 
 ## 9) RestMyCase::Validator class
-This class is going to suffer some massive changes, since I'm considering delegating all validation responsibilities to [compel](https://github.com/joaquimadraz/compel) gem.
+WIP
 
 ---
 

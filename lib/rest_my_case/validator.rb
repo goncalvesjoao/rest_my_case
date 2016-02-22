@@ -6,11 +6,6 @@ module RestMyCase
 
       attr_writer :validators
 
-      def trial_court
-        @trial_court ||= Trial::Court.new \
-          Judge::Base, DefenseAttorney::Base, Validator, Context::Base
-      end
-
       def target_options
         @target_options || Helpers.super_method(self, :target_options)
       end
@@ -59,6 +54,8 @@ module RestMyCase
 
     extend ClassMethods
 
+    trial_court.last_ancestor = Validator
+
     self.silence_dependencies_abort = true
 
     extend AccusationAttorneys::HelperMethods
@@ -91,9 +88,7 @@ module RestMyCase
 
       return if Helpers.blank?(targets) || all_validations_green?(targets)
 
-      if parent_target
-        parent_target.errors.add(target_options[:name], :invalid)
-      end
+      parent_target.errors.add(target_options[:name], :invalid) if parent_target
 
       error('unprocessable_entity')
     end

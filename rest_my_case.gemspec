@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ['goncalvesjoao']
   gem.email         = ['goncalves.joao@gmail.com']
   gem.summary       = %q{Quick and light "The Clean Architecture" use case implementation.}
-  gem.description   = %q{Very light Ruby gem with everything you need in a "The Clean Architecture" use case scenario}
+  gem.description   = %q{Light Ruby gem with everything you need in a "The Clean Architecture" use case scenario}
   gem.homepage      = 'https://github.com/goncalvesjoao/rest_my_case'
   gem.license       = 'MIT'
 
