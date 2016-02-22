@@ -4,8 +4,8 @@ module RestMyCase
     class Base
 
       def initialize(trial_case)
-        @trial_case            = trial_case
-        @performed_use_cases   = []
+        @trial_case = trial_case
+        @performed_use_cases = []
         @use_case_that_aborted = nil
       end
 
@@ -22,16 +22,21 @@ module RestMyCase
 
       def run_setup_methods
         @trial_case.use_cases.each do |use_case|
-          break if method_setup_has_aborted use_case
+          break if method_aborts?(:setup, use_case)
         end
       end
 
       def run_perform_methods
-        return nil if @use_case_that_aborted
-
         @trial_case.use_cases.each do |use_case|
-          break if method_perform_has_aborted use_case
+          validate_context_aborts?(use_case)
+
+          next if use_case.options[:should_skip] || @use_case_that_aborted
+
+          @performed_use_cases.push use_case
+
+          method_aborts?(:perform, use_case)
         end
+
       end
 
       def run_rollback_methods
@@ -50,16 +55,16 @@ module RestMyCase
 
       private ########################### PRIVATE ##############################
 
-      def method_setup_has_aborted(use_case)
-        method_aborts?(:setup, use_case)
-      end
+      def validate_context_aborts?(use_case)
+        should_abort_before = use_case.options[:should_abort]
 
-      def method_perform_has_aborted(use_case)
-        return false if use_case.options[:should_skip]
+        use_case.validate_context
 
-        @performed_use_cases.push use_case
-
-        method_aborts?(:perform, use_case)
+        if !should_abort_before && use_case.options[:should_abort]
+          @use_case_that_aborted = use_case
+        end
+      rescue Errors::Abort
+        @use_case_that_aborted = use_case
       end
 
       def method_aborts?(method_name, use_case)

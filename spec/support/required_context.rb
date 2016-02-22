@@ -1,21 +1,61 @@
 module RequiredContext
 
-  class Base < RestMyCase::Base
+  module Users
+    class Create < RestMyCase::Base
+      required_context \
+        admin: Compel.boolean,
+        user_attributes: Compel.any
+    end
+
+    class GetCurrentUser < RestMyCase::Base
+      required_context [
+        :current_user
+      ]
+      def setup
+        context.current_user = Object.new
+      end
+    end
   end
 
-  class CreateUser < RestMyCase::Base
+  module Posts
+    class Create < RestMyCase::Base
+      required_context \
+        post_attributes: Compel.any,
+        current_user: Compel.any.required
+    end
 
-    # required_context \
-    #   user_attributes: Compel.any
+    class FindOne < RestMyCase::Base
+      required_context [
+        :id
+      ]
 
-  end
+      def perform
+        context.post = OpenStruct.new id: context.id
+      end
+    end
 
-  class CreatePost < RestMyCase::Base
+    class AssignAttributes < RestMyCase::Base
+      required_context \
+        :post,
+        :post_attributes
 
-    # required_context \
-    #   current_user: Compel.any.required,
-    #   post_attributes: Compel.any
+      def perform
+        context.post.assign_attributes context.post_attributes
+      end
+    end
 
+    class Save < RestMyCase::Base
+      required_context \
+        :post
+
+      def perform
+        context.post.save
+      end
+    end
+
+    class Update < RestMyCase::Base
+      depends FindOne, AssignAttributes, Save
+    end
   end
 
 end

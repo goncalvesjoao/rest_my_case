@@ -4,7 +4,7 @@ module RestMyCase
     class Base
 
       def initialize(trial_case)
-        @trial_case           = trial_case
+        @trial_case = trial_case
         @trial_case.use_cases = []
       end
 
