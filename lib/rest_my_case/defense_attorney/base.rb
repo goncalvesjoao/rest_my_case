@@ -24,6 +24,7 @@ module RestMyCase
         end
 
         @trial_case.use_cases.push use_case
+        @trial_case.defendant_child = use_case
       end
 
       def dependencies(use_case_class)

@@ -12,6 +12,14 @@ describe RestMyCase::Base do
       end
     end
 
+    context "When the required_context of a class fails, its dependencies shouldn't run" do
+      before { @context = RequiredContext::Users::Create.perform }
+
+      it "context dependencies should not have ran" do
+        expect(@context.current_user).to be nil
+      end
+    end
+
     context "When dependencies also have a required_context" do
       before { @context = RequiredContext::Posts::Update.perform }
 

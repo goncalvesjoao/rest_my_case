@@ -27,6 +27,8 @@ module RestMyCase
       end
 
       def run_perform_methods
+        validate_context_aborts?(@trial_case.defendant_child)
+
         @trial_case.use_cases.each do |use_case|
           validate_context_aborts?(use_case)
 

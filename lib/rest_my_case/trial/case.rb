@@ -3,7 +3,7 @@ module RestMyCase
 
     class Case
 
-      attr_accessor :use_cases, :should_abort
+      attr_accessor :use_cases, :should_abort, :defendant_child
 
       attr_reader :context,
                   :defendant,

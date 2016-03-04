@@ -6,8 +6,27 @@ module RequiredContext
         :current_user
       ]
       def setup
-        context.current_user = Object.new
+        context.current_user = OpenStruct.new
       end
+    end
+
+    class BuildUser < RestMyCase::Base
+      def perform
+        context.current_user = OpenStruct.new context.current_user_attributes
+      end
+    end
+
+    class Save < RestMyCase::Base
+      def perform
+        context.current_user.save
+      end
+    end
+
+    class Create < RestMyCase::Base
+      depends BuildUser, Save
+
+      required_context \
+        :current_user
     end
   end
 
