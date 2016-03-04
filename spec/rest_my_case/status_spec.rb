@@ -163,6 +163,20 @@ describe RestMyCase::Status do
       end
     end
 
+    context "When a class inherits from another" do
+      StatusTestCase7 = Class.new(RestMyCase::Base) do
+        include RestMyCase::Status
+      end
+
+      StatusTestCase8 = Class.new(StatusTestCase7)
+
+      before { @context = StatusTestCase8.perform }
+
+      it "context should be Context::Status" do
+        expect(@context.class).to be RestMyCase::Context::Status
+      end
+    end
+
   end
 
 end

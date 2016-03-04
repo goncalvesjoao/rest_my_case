@@ -4,10 +4,15 @@ module RestMyCase
 
   module Status
 
-    def self.included(parent_class)
-      return unless parent_class.respond_to? :trial_court
+    module ClassMethods
+      def trial_court
+        @trial_court ||= Trial::Court.new \
+          Judge::Base, DefenseAttorney::Base, Base, Context::Status
+      end
+    end
 
-      parent_class.trial_court.context_class = Context::Status
+    def self.included(parent_class)
+      parent_class.extend ClassMethods
     end
 
     def status

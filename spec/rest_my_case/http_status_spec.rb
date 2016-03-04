@@ -53,4 +53,18 @@ describe RestMyCase::HttpStatus do
     end
   end
 
+  context "When a class inherits from another" do
+    HttpStatusTestCase1 = Class.new(RestMyCase::Base) do
+      include RestMyCase::HttpStatus
+    end
+
+    HttpStatusTestCase2 = Class.new(HttpStatusTestCase1)
+
+    before { @context = HttpStatusTestCase2.perform }
+
+    it "context should be Context::HttpStatus" do
+      expect(@context.class).to be RestMyCase::Context::HttpStatus
+    end
+  end
+
 end
