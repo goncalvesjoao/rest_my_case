@@ -8,7 +8,9 @@ module RestMyCase
 
       alias_method :attributes, :marshal_dump
 
-      include ActiveModel::Serialization if defined?(ActiveModel)
+      if defined?(ActiveModel) && defined?(ActiveModel::Serialization)
+        include ActiveModel::Serialization
+      end
 
       def self.error_class
         Errors::Base
