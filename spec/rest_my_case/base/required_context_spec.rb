@@ -10,6 +10,11 @@ describe RestMyCase::Base do
       it "context should be ok" do
         expect(@context.ok?).to be true
       end
+
+      it "use_case instance should have a delegating method to that required_context" do
+        use_case = RequiredContext::Users::GetCurrentUser.new({})
+        expect(use_case).to respond_to(:current_user)
+      end
     end
 
     context "When the required_context of a class fails, its dependencies shouldn't run" do

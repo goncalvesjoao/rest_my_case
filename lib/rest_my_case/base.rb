@@ -10,11 +10,13 @@ module RestMyCase
     end
 
     def self.required_context(*schema)
+      @required_context_schema = schema
+
       if schema.length == 1 && (schema[0].is_a?(Hash) || schema[0].is_a?(Array))
         @required_context_schema = schema[0]
-      else
-        @required_context_schema = schema
       end
+
+      @required_context_schema.each { |context_key| context_reader context_key }
     end
 
     def self.required_context_schema
