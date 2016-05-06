@@ -30,9 +30,9 @@ module RestMyCase
         validate_context_aborts?(@trial_case.defendant_child)
 
         @trial_case.use_cases.each do |use_case|
-          validate_context_aborts?(use_case)
-
           next if use_case.options[:should_skip] || @use_case_that_aborted
+
+          validate_context_aborts?(use_case)
 
           @performed_use_cases.push use_case
 

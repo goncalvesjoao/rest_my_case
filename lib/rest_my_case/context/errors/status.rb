@@ -10,7 +10,7 @@ module RestMyCase
           super
 
           if error[:status].nil? && error[:message]
-            error[:status]  = error[:message]
+            error[:status] = error[:message]
             error[:message] = nil
           end
 

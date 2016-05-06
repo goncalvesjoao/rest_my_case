@@ -32,21 +32,17 @@ describe RestMyCase::Base do
         expect(@context.ok?).to be false
       end
 
-      it "context errors should include 3 context_errors" do
-        expect(@context.errors.length).to be 3
+      it "context errors should only include the first context_errors" do
+        expect(@context.errors.length).to be 1
         expect(@context.errors[0][:context_errors][:id]).to be_truthy
-        expect(@context.errors[1][:context_errors][:post]).to be_truthy
-        expect(@context.errors[1][:context_errors][:post_attributes]).to be_truthy
-        expect(@context.errors[2][:context_errors][:post]).to be_truthy
       end
     end
 
     context "When the required_context of a class fails and one of the dependencies aborts first" do
       before { @context = RequiredContext::Comments::Update.perform }
 
-      xit "required_context should not have ran" do
-        binding.pry
-        # expect(@context.current_user).to be nil
+      it "required_context should not have ran" do
+        expect(@context.errors.length).to be 1
       end
     end
 
