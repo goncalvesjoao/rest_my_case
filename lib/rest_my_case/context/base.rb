@@ -20,6 +20,10 @@ module RestMyCase
         SchemaValidator::Base
       end
 
+      def values_at(*keys)
+        attributes.values_at(*keys)
+      end
+
       def to_hash
         Marshal.load Marshal.dump(attributes)
       end

@@ -247,6 +247,7 @@ Methods | Behaviour
 ------- | ---------
 **#attributes** | Alias to **#marshal_dump**, returns all of the context's stored data.
 **#to_hash** | Serializes and unserializes **#attributes** turning any existing ruby objects into serialized strings.
+**#values_at(*keys)** | Short for **#attributes.values_at(*keys)**, returns an array with correspondent values for each key.
 **#valid?** | Checks if **#errors** is empty
 **#ok?** | Alias to **#valid?**
 **#success?** | Alias to **#ok?**

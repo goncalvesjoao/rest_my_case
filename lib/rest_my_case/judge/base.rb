@@ -38,7 +38,6 @@ module RestMyCase
 
           method_aborts?(:perform, use_case)
         end
-
       end
 
       def run_rollback_methods

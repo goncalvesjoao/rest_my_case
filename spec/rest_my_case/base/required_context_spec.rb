@@ -41,6 +41,15 @@ describe RestMyCase::Base do
       end
     end
 
+    context "When the required_context of a class fails and one of the dependencies aborts first" do
+      before { @context = RequiredContext::Comments::Update.perform }
+
+      xit "required_context should not have ran" do
+        binding.pry
+        # expect(@context.current_user).to be nil
+      end
+    end
+
   end
 
 end

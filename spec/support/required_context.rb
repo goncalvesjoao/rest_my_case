@@ -65,4 +65,24 @@ module RequiredContext
     end
   end
 
+  module Comments
+    class FindOne < RestMyCase::Base
+      def perform
+        error!(:not_found)
+      end
+    end
+
+    class AssignAttributes < RestMyCase::Base
+      required_context :comment
+    end
+
+    class Save < RestMyCase::Base
+      required_context :comment
+    end
+
+    class Update < RestMyCase::Base
+      depends FindOne, AssignAttributes, Save
+    end
+  end
+
 end
