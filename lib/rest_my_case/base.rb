@@ -24,7 +24,7 @@ module RestMyCase
     end
 
     def self.depends(*use_case_classes)
-      dependencies.push(*use_case_classes)
+      dependencies.concat(use_case_classes)
     end
 
     def self.dependencies
