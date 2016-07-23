@@ -20,6 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'pry', '~> 0.10'
   gem.add_development_dependency 'rake', '~> 10.1'
+  gem.add_development_dependency 'json', '~> 1.8.3'
   gem.add_development_dependency 'rspec', '~> 3.2'
   gem.add_development_dependency 'rubocop', '~> 0.30'
   gem.add_development_dependency 'simplecov', '~> 0.9'
