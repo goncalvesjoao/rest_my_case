@@ -53,7 +53,7 @@ module RestMyCase
         http_version_not_supported: 505,
         insufficient_storage: 507,
         not_extended: 510
-      }
+      }.freeze
 
       def http_status
         RAILS_HTTP_STATUS[status.to_sym]

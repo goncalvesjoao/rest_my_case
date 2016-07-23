@@ -20,11 +20,8 @@ module RestMyCase
     end
 
     def failure(status, error_message = nil)
-      if error_message.is_a?(Hash)
-        error_data = error_message
-      else
-        error_data = { message: error_message }
-      end
+      error_data = \
+        error_message.is_a?(Hash) ? error_message : { message: error_message }
 
       error_data[:status] = status
 
@@ -32,7 +29,7 @@ module RestMyCase
     end
 
     def failure!(status, error = nil)
-      failure(status, error) && fail(Errors::Abort)
+      failure(status, error) && raise(Errors::Abort)
     end
 
   end

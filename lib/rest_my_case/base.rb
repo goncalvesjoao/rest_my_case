@@ -35,7 +35,7 @@ module RestMyCase
       attributes ||= {}
 
       unless attributes.respond_to?(:to_hash)
-        fail ArgumentError, 'Must respond_to method #to_hash'
+        raise ArgumentError, 'Must respond_to method #to_hash'
       end
 
       trial_court.execute([self], attributes.to_hash).context
@@ -99,15 +99,12 @@ module RestMyCase
     end
 
     def abort!
-      abort && fail(Errors::Abort)
+      abort && raise(Errors::Abort)
     end
 
     def error(error_message = '')
-      if error_message.is_a?(Hash)
-        error_data = error_message
-      else
-        error_data = { message: error_message }
-      end
+      error_data = \
+        error_message.is_a?(Hash) ? error_message : { message: error_message }
 
       error_data[:class_name] = self.class.name
 
@@ -115,7 +112,7 @@ module RestMyCase
     end
 
     def error!(error_data = '')
-      error(error_data) && fail(Errors::Abort)
+      error(error_data) && raise(Errors::Abort)
     end
 
     def skip
@@ -123,7 +120,7 @@ module RestMyCase
     end
 
     def skip!
-      skip && fail(Errors::Skip)
+      skip && raise(Errors::Skip)
     end
 
     def validate_context(schema = self.class.required_context_schema)
@@ -135,7 +132,7 @@ module RestMyCase
     end
 
     def validate_context!(schema = self.class.required_context)
-      validate_context(schema) && fail(Errors::Abort)
+      validate_context(schema) && raise(Errors::Abort)
     end
 
   end

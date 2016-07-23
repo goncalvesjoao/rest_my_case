@@ -31,7 +31,7 @@ module RestMyCase
       end
 
       def status=(_)
-        fail 'status is a reserved keyword which cannot be set'
+        raise 'status is a reserved keyword which cannot be set'
       end
 
     end

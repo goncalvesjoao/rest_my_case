@@ -18,7 +18,7 @@ module RestMyCase
       # Override this method in subclasses with validation logic, adding errors
       # to the records +errors+ array where necessary.
       def validate(record)
-        fail NotImplementedError, "Subclasses must implement a validate(record) method."
+        raise NotImplementedError, "Subclasses must implement a validate(record) method."
       end
 
     end

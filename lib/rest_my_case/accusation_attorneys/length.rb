@@ -79,7 +79,7 @@ module RestMyCase
         validates_with Length, _merge_attributes(attr_names)
       end
 
-      alias_method :validates_size_of, :validates_length_of
+      alias :validates_size_of :validates_length_of
     end
 
   end

@@ -163,7 +163,7 @@ module RestMyCase
         all? { |k, v| v && v.empty? && !v.is_a?(String) }
       end
       # aliases empty?
-      alias_method :blank?, :empty?
+      alias blank? empty?
 
       # Returns an xml formatted representation of the Errors hash.
       #

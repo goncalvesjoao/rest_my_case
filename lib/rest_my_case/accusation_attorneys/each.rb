@@ -11,7 +11,7 @@ module RestMyCase
 
       def initialize(options)
         @attributes = Array(options.delete(:attributes))
-        fail ArgumentError, ":attributes cannot be blank" if @attributes.empty?
+        raise ArgumentError, ":attributes cannot be blank" if @attributes.empty?
         super
         check_validity!
       end
@@ -27,7 +27,7 @@ module RestMyCase
       # Override this method in subclasses with the validation logic, adding
       # errors to the records +errors+ array where necessary.
       def validate_each(record, attribute, value)
-        fail NotImplementedError, "Subclasses must implement a validate_each(record, attribute, value) method"
+        raise NotImplementedError, "Subclasses must implement a validate_each(record, attribute, value) method"
       end
 
       def check_validity!; end
