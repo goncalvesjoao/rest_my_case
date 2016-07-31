@@ -1,8 +1,6 @@
 module RestMyCase
   module Context
-
     class HttpStatus < Status
-
       RAILS_HTTP_STATUS = {
         continue: 100,
         switching_protocols: 101,
@@ -70,8 +68,6 @@ module RestMyCase
           { message: 'unkown error' }
         end
       end
-
     end
-
   end
 end

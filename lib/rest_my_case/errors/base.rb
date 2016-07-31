@@ -1,8 +1,6 @@
 module RestMyCase
   module Errors
-
-    class Base < StandardError; end
-
+    Base = Class.new(StandardError)
   end
 end
 

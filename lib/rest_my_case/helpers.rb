@@ -1,7 +1,5 @@
 module RestMyCase
-
   module Helpers
-
     module_function
 
     def blank?(object)
@@ -11,7 +9,5 @@ module RestMyCase
         object.respond_to?(:empty?) ? object.empty? : !object
       end
     end
-
   end
-
 end

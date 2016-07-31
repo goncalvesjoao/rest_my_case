@@ -1,9 +1,7 @@
 require 'rest_my_case/context/status'
 
 module RestMyCase
-
   module Status
-
     module ClassMethods
       def trial_court
         @trial_court ||= Trial::Court.new \
@@ -31,7 +29,5 @@ module RestMyCase
     def failure!(status, error = nil)
       failure(status, error) && raise(Errors::Abort)
     end
-
   end
-
 end

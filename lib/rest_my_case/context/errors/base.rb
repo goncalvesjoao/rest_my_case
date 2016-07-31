@@ -1,9 +1,7 @@
 module RestMyCase
   module Context
     module Errors
-
       class Base < Array
-
         def initialize(context)
           super()
 
@@ -13,9 +11,7 @@ module RestMyCase
         def add(error)
           push(error)
         end
-
       end
-
     end
   end
 end

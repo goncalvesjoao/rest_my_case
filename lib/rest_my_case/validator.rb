@@ -1,9 +1,7 @@
 require 'object_attorney'
 
 module RestMyCase
-
   class Validator < Base
-
     include ObjectAttorney
 
     def self.target(name, options = {})
@@ -23,7 +21,5 @@ module RestMyCase
     def perform
       error('unprocessable_entity') if invalid?
     end
-
   end
-
 end

@@ -1,8 +1,6 @@
 module RestMyCase
   module Config
-
     class General
-
       include Base
 
       def initialize
@@ -29,8 +27,6 @@ module RestMyCase
           custom_config
         end
       end
-
     end
-
   end
 end

@@ -1,7 +1,5 @@
 module RestMyCase
-
   class Base
-
     extend Config::Base
 
     def self.trial_court
@@ -134,7 +132,5 @@ module RestMyCase
     def validate_context!(schema = self.class.required_context)
       validate_context(schema) && raise(Errors::Abort)
     end
-
   end
-
 end

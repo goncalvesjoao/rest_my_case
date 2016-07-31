@@ -1,8 +1,6 @@
 module RestMyCase
   module Judge
-
     class Base
-
       def initialize(trial_case)
         @trial_case = trial_case
         @performed_use_cases = []
@@ -77,8 +75,6 @@ module RestMyCase
       rescue Errors::Abort
         @use_case_that_aborted = use_case
       end
-
     end
-
   end
 end

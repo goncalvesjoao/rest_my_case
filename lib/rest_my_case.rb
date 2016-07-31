@@ -17,7 +17,6 @@ require 'rest_my_case/http_status'
 require 'rest_my_case/validator'
 
 module RestMyCase
-
   def self.configure
     yield config
   end
@@ -33,5 +32,4 @@ module RestMyCase
   def self.get_config(attribute, use_case)
     config.get(attribute, use_case)
   end
-
 end

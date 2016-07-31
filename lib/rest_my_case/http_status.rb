@@ -1,9 +1,7 @@
 require 'rest_my_case/context/http_status'
 
 module RestMyCase
-
   module HttpStatus
-
     include Status
 
     module ClassMethods
@@ -16,7 +14,5 @@ module RestMyCase
     def self.included(parent_class)
       parent_class.extend ClassMethods
     end
-
   end
-
 end

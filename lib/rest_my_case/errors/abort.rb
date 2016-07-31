@@ -1,7 +1,5 @@
 module RestMyCase
   module Errors
-
-    class Abort < Base; end
-
+    Abort = Class.new(Base)
   end
 end

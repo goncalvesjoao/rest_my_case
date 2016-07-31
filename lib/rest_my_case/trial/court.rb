@@ -1,9 +1,9 @@
 module RestMyCase
   module Trial
-
-    Court = Struct.new \
-      :judge_class, :defense_attorney_class, :last_ancestor, :context_class do
-
+    Court = Struct.new :judge_class,
+                       :defense_attorney_class,
+                       :last_ancestor,
+                       :context_class do
       def execute(use_case_classes, attributes = {})
         trial_case = Case.new \
           last_ancestor, context_class, use_case_classes, attributes
@@ -14,8 +14,6 @@ module RestMyCase
 
         trial_case
       end
-
     end
-
   end
 end

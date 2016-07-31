@@ -2,9 +2,7 @@ require 'rest_my_case/context/errors/status'
 
 module RestMyCase
   module Context
-
     class Status < Base
-
       class StatusString < String
 
         def method_missing(method, *args, &block)
@@ -33,8 +31,6 @@ module RestMyCase
       def status=(_)
         raise 'status is a reserved keyword which cannot be set'
       end
-
     end
-
   end
 end

@@ -3,9 +3,7 @@ require 'rest_my_case/context/schema_validator/base'
 
 module RestMyCase
   module Context
-
     class Base < OpenStruct
-
       alias attributes marshal_dump
 
       if defined?(ActiveModel) && defined?(ActiveModel::Serialization)
@@ -43,8 +41,6 @@ module RestMyCase
       alias ok? valid?
 
       alias success? ok?
-
     end
-
   end
 end

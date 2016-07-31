@@ -1,8 +1,6 @@
 module RestMyCase
   module Trial
-
     class Case
-
       attr_accessor :use_cases, :should_abort, :defendant_child
 
       attr_reader :context,
@@ -33,8 +31,6 @@ module RestMyCase
       def build_defendant(last_ancestor, use_case_classes)
         Class.new(last_ancestor) { depends(*use_case_classes) }
       end
-
     end
-
   end
 end

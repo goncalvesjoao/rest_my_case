@@ -1,9 +1,7 @@
 module RestMyCase
   module Context
     module SchemaValidator
-
       class Base
-
         def initialize(context)
           @context = context
         end
@@ -19,9 +17,7 @@ module RestMyCase
 
           Helpers.blank?(errors) ? nil : errors
         end
-
       end
-
     end
   end
 end

@@ -1,12 +1,3 @@
-Style/EmptyLinesAroundBlockBody:
-  Enabled: false
-
-Style/EmptyLinesAroundMethodBody:
-  Enabled: false
-
-Style/EmptyLinesAroundModuleBody:
-  Enabled: false
-
 Style/EmptyLinesAroundClassBody:
   Enabled: false
 

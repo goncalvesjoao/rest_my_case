@@ -1,8 +1,6 @@
 module RestMyCase
   module DefenseAttorney
-
     class Base
-
       def initialize(trial_case)
         @trial_case = trial_case
         @trial_case.use_cases = []
@@ -36,8 +34,6 @@ module RestMyCase
           use_case_class.dependencies | dependencies(use_case_class.superclass)
         end
       end
-
     end
-
   end
 end

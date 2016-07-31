@@ -3,9 +3,7 @@ require 'compel'
 module RestMyCase
   module Context
     module SchemaValidator
-
       class Base
-
         def initialize(context)
           @context = context
         end
@@ -28,9 +26,7 @@ module RestMyCase
             schema.each { |key| new_schema[key] = Compel.any.required }
           end
         end
-
       end
-
     end
   end
 end

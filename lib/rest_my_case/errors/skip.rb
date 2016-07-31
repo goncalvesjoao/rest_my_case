@@ -1,7 +1,5 @@
 module RestMyCase
   module Errors
-
-    class Skip < Base; end
-
+    Skip = Class.new(Base)
   end
 end
