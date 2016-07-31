@@ -19,13 +19,13 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.add_development_dependency 'pry', '~> 0.10'
-  gem.add_development_dependency 'rake', '~> 10.1'
-  gem.add_development_dependency 'json', '~> 1.8.3'
-  gem.add_development_dependency 'rspec', '~> 3.2'
-  gem.add_development_dependency 'rubocop', '~> 0.30'
-  gem.add_development_dependency 'simplecov', '~> 0.9'
-  gem.add_development_dependency 'codeclimate-test-reporter', '~> 0.4'
+  gem.add_development_dependency 'pry', '0.10.3'
+  gem.add_development_dependency 'rake', '11.2.2'
+  gem.add_development_dependency 'json', '1.8.3'
+  gem.add_development_dependency 'rspec', '3.4.0'
+  gem.add_development_dependency 'rubocop', '0.37.2'
+  gem.add_development_dependency 'simplecov', '0.11.2'
+  gem.add_development_dependency 'codeclimate-test-reporter', '0.4.8'
 
   gem.add_dependency 'object_attorney', '~> 3.0'
 end
