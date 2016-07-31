@@ -12,13 +12,9 @@ Style/EmptyLinesAroundClassBody:
 
 AllCops:
   Exclude:
-    - '**/Rakefile'
-    - '**/*.gemspec'
-    - '**/console'
     - 'spec/**/*'
     - 'tmp/**/*'
-    - 'pkg/**/*'
-    - 'lib/rest_my_case/accusation_attorneys/**/*'
+    - 'vendor/**/*'
 
 Documentation:
   Enabled: false
