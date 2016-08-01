@@ -5,6 +5,7 @@
 /InstalledFiles
 /pkg/
 /spec/reports/
+/spec/examples.txt
 /test/tmp/
 /test/version_tmp/
 /tmp/
@@ -20,15 +21,15 @@ build/
 /doc/
 /rdoc/
 
-## Environment normalisation:
+## Environment normalization:
 /.bundle/
 /vendor/bundle
 /lib/bundler/man/
 
 # for a library or gem, you might want to ignore these files since the code is
 # intended to run in multiple environments; otherwise, check them in:
-Gemfile.lock
-.ruby-version
+# Gemfile.lock
+# .ruby-version
 .ruby-gemset
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
@@ -39,3 +40,11 @@ Gemfile.lock
 *.o
 *.a
 mkmf.log
+
+.DS_Store
+
+# Jetbrains Idea files
+.idea/
+api.iml
+
+db/schema.rb
