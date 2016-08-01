@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest_my_case (2.0.2)
+    rest_my_case (2.0.3)
       object_attorney (>= 3.0.6)
 
 GEM
@@ -24,7 +24,7 @@ GEM
     json (1.8.3)
     method_source (0.8.2)
     multi_json (1.12.1)
-    object_attorney (3.0.6)
+    object_attorney (3.0.7)
       activemodel (>= 3.0.0)
     parser (2.3.0.6)
       ast (~> 2.2)

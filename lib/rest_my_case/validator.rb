@@ -19,6 +19,8 @@ module RestMyCase
     self.silence_dependencies_abort = true
 
     def perform
+      return if defendant_options.empty?
+
       error('unprocessable_entity') if invalid?
     end
   end
