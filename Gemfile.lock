@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest_my_case (2.0.3)
+    rest_my_case (2.0.4)
       object_attorney (>= 3.0.6)
 
 GEM
