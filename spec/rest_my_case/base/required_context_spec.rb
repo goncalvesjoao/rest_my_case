@@ -4,6 +4,60 @@ describe RestMyCase::Base do
 
   describe ".required_context" do
 
+    context "When the target is an empty array" do
+      it "context should be ok" do
+        context = RequiredContext::Posts::FindOne.perform(id: [])
+
+        expect(context.ok?).to be true
+      end
+    end
+
+    context "When the target is a blank string" do
+      it "context should be ok" do
+        context = RequiredContext::Posts::FindOne.perform(id: '')
+
+        expect(context.ok?).to be true
+      end
+    end
+
+    context "When the target is a empty hash" do
+      it "context should be ok" do
+        context = RequiredContext::Posts::FindOne.perform(id: {})
+
+        expect(context.ok?).to be true
+      end
+    end
+
+    context "When the target is nil" do
+      it "context should NOT be ok" do
+        context = RequiredContext::Posts::FindOne.perform(id: nil)
+
+        expect(context.ok?).to be false
+
+        expect(context.errors.length).to be 1
+        expect(context.errors[0][:context_errors][:id]).to be_truthy
+      end
+    end
+
+    context "When the target is 0" do
+      it "context should be ok" do
+        context = RequiredContext::Posts::FindOne.perform(id: 0)
+
+        expect(context.ok?).to be true
+      end
+    end
+
+    context "When there is no target at all" do
+      it "context should NOT be ok" do
+        context = RequiredContext::Posts::FindOne.perform
+
+        expect(context.ok?).to be false
+
+        expect(context.errors.length).to be 1
+        expect(context.errors[0][:context_errors][:id]).to be_truthy
+      end
+    end
+
     context "When #setup odly populates the required field" do
       before { @context = RequiredContext::Users::GetCurrentUser.perform }
 

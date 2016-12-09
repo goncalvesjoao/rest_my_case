@@ -10,7 +10,7 @@ module RestMyCase
           errors = {}
 
           schema.each do |required_attribute|
-            if Helpers.blank?(@context.send(required_attribute))
+            if @context.send(required_attribute).nil?
               errors[required_attribute] = 'is required'
             end
           end
