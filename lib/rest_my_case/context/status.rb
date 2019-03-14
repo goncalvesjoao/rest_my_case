@@ -20,6 +20,12 @@ module RestMyCase
           end
         end
 
+        def respond_to_missing?(method_name, include_private = false)
+          last_char = method_name[-1]
+
+          last_char == '!' || last_char == '?' || super
+        end
+
       end
 
       def self.error_class
