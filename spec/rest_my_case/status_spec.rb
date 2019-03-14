@@ -66,6 +66,10 @@ describe RestMyCase::Status do
         expect(@context.status.internal_server_error?).to be true
       end
 
+      it "must NOT raise an error" do
+        expect { StatusTestCase3.perform }.to_not raise_error
+      end
+
       it "@context.next_line should be nil" do
         expect(@context.next_line).to be nil
       end
@@ -102,8 +106,26 @@ describe RestMyCase::Status do
         expect(@context.status.ok?).to be false
       end
 
+      it "must NOT raise an error" do
+        expect { StatusTestCase3.perform }.to_not raise_error
+      end
+
       it "context's errors should have a proper message" do
         expect(@context.errors).to match [a_hash_including({ status: 'internal_server_error', message: 'something bad', class_name: "StatusTestCase4", yada: true })]
+      end
+    end
+
+    context "when error!(test: :internal_server_error) is used" do
+      StatusTestCase5 = Class.new(RestMyCase::Base) do
+        include RestMyCase::Status
+        def perform
+          error!(test: :internal_server_error)
+          context.next_line = true
+        end
+      end
+
+      it "must NOT raise an error" do
+        expect { StatusTestCase5.perform }.to_not raise_error
       end
     end
 
