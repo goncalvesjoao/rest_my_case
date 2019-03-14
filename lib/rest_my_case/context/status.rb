@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rest_my_case/context/errors/status'
 
 module RestMyCase
@@ -12,7 +14,7 @@ module RestMyCase
           if last_char == '!'
             replace(method_name)
           elsif last_char == '?'
-            self == method_name
+            method_name == self
           else
             super
           end

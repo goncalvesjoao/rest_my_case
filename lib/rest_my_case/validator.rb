@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'object_attorney'
 
 module RestMyCase

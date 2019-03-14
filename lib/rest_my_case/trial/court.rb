@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RestMyCase
   module Trial
     Court = Struct.new :judge_class,

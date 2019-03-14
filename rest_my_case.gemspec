@@ -1,4 +1,6 @@
 # coding: utf-8
+# frozen_string_literal: true
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rest_my_case/version'
@@ -23,7 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '11.2.2'
   gem.add_development_dependency 'json', '1.8.3'
   gem.add_development_dependency 'rspec', '3.4.0'
-  gem.add_development_dependency 'rubocop', '0.37.2'
+  gem.add_development_dependency 'rubocop', '0.49.0'
   gem.add_development_dependency 'simplecov', '0.11.2'
   gem.add_development_dependency 'activemodel', '~> 3'
   gem.add_development_dependency 'codeclimate-test-reporter', '0.4.8'

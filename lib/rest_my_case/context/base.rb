@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rest_my_case/context/errors/base'
 require 'rest_my_case/context/schema_validator/base'
 

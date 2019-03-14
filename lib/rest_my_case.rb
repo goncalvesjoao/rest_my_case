@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 
 require 'rest_my_case/version'
